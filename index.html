@@ -8,357 +8,194 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg: #F1F5F9;
-  --sidebar: #0F172A;
-  --sidebar-hover: #1E293B;
-  --sidebar-active: #1D4ED8;
-  --primary: #1D4ED8;
-  --primary-light: #2563EB;
-  --surface: #FFFFFF;
-  --border: #E2E8F0;
-  --text: #0F172A;
-  --muted: #64748B;
-  --success: #059669;
-  --warning: #D97706;
-  --danger: #DC2626;
-  --info: #0284C7;
+  --bg: #F1F5F9; --sidebar: #0F172A; --sidebar-hover: #1E293B;
+  --primary: #1D4ED8; --primary-light: #2563EB;
+  --surface: #FFFFFF; --border: #E2E8F0;
+  --text: #0F172A; --muted: #64748B;
+  --success: #059669; --warning: #D97706; --danger: #DC2626;
   --radius: 8px;
-  --shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
 }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter',system-ui,sans-serif; background:var(--bg); color:var(--text); height:100vh; overflow:hidden; font-size:14px; }
+#app { display:flex; height:100vh; }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; font-size: 14px; }
+/* SIDEBAR */
+#sidebar { width:210px; background:var(--sidebar); display:flex; flex-direction:column; flex-shrink:0; }
+.sna-logo { padding:18px 16px 14px; border-bottom:1px solid #1E293B; }
+.sna-logo .sn { font-size:13px; font-weight:700; color:#fff; }
+.sna-logo .ss { font-size:11px; color:#475569; margin-top:2px; }
+.nav { flex:1; padding:10px 0; overflow-y:auto; }
+.nav-item { display:flex; align-items:center; gap:9px; padding:9px 16px; cursor:pointer; color:#94A3B8; font-size:13px; font-weight:500; transition:background .15s,color .15s; border-left:3px solid transparent; user-select:none; }
+.nav-item:hover { background:var(--sidebar-hover); color:#E2E8F0; }
+.nav-item.active { background:#172554; color:#93C5FD; border-left-color:#3B82F6; }
+.nav-item .ni { font-size:15px; width:18px; flex-shrink:0; }
+.sidebar-foot { padding:10px 16px; border-top:1px solid #1E293B; font-size:11px; color:#334155; text-align:center; }
 
-/* ── LAYOUT ─────────────────────────────────────── */
-#app { display: flex; height: 100vh; }
+/* MAIN */
+#main { flex:1; display:flex; flex-direction:column; overflow:hidden; min-width:0; }
+#topbar { background:var(--surface); border-bottom:1px solid var(--border); padding:0 20px; height:50px; display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+#topbar .tn { font-weight:700; font-size:15px; }
+.topbar-r { display:flex; align-items:center; gap:12px; }
+.clk { font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; }
+.sync-dot { width:8px; height:8px; border-radius:50%; display:inline-block; }
+.sync-ok { background:#10b981; } .sync-ing { background:#f59e0b; } .sync-err { background:#ef4444; } .sync-off { background:#94a3b8; }
+.sync-btn { padding:4px 10px; border:1px solid var(--border); border-radius:5px; background:var(--surface); font-size:11px; font-family:inherit; cursor:pointer; display:flex; align-items:center; gap:5px; color:var(--muted); }
+.sync-btn:hover { background:var(--bg); }
 
-/* ── SIDEBAR ────────────────────────────────────── */
-#sidebar {
-  width: 210px;
-  background: var(--sidebar);
-  display: flex;
-  flex-direction: column;
-  flex-shrink: 0;
-  overflow: hidden;
-}
-.sna-logo {
-  padding: 20px 16px 16px;
-  border-bottom: 1px solid #1E293B;
-}
-.sna-logo .shop-name {
-  font-size: 13px;
-  font-weight: 700;
-  color: #FFFFFF;
-  letter-spacing: 0.3px;
-}
-.sna-logo .shop-sub {
-  font-size: 11px;
-  color: #475569;
-  margin-top: 2px;
-}
-.nav { flex: 1; padding: 10px 0; overflow-y: auto; }
-.nav-item {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 16px;
-  cursor: pointer;
-  color: #94A3B8;
-  font-size: 13px;
-  font-weight: 500;
-  transition: background 0.15s, color 0.15s;
-  border-left: 3px solid transparent;
-  user-select: none;
-}
-.nav-item:hover { background: var(--sidebar-hover); color: #E2E8F0; }
-.nav-item.active { background: #172554; color: #93C5FD; border-left-color: #3B82F6; }
-.nav-item .ni { font-size: 15px; width: 18px; flex-shrink: 0; }
-.sidebar-foot {
-  padding: 12px 16px;
-  border-top: 1px solid #1E293B;
-  font-size: 11px;
-  color: #334155;
-  text-align: center;
-}
+#content { flex:1; overflow-y:auto; padding:18px 22px; }
 
-/* ── MAIN ───────────────────────────────────────── */
-#main { flex: 1; display: flex; flex-direction: column; overflow: hidden; min-width: 0; }
+/* CARDS */
+.card { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); padding:16px 18px; }
+.card-title { font-size:13px; font-weight:600; margin-bottom:13px; }
 
-#topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 24px;
-  height: 52px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-shrink: 0;
-}
-#topbar .page-name { font-weight: 700; font-size: 15px; }
-#topbar .topbar-right { display: flex; align-items: center; gap: 20px; }
-.topbar-clock { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+/* BUTTONS */
+.btn { display:inline-flex; align-items:center; gap:6px; padding:7px 14px; border-radius:6px; border:none; font-size:13px; font-weight:500; font-family:inherit; cursor:pointer; transition:opacity .15s; white-space:nowrap; }
+.btn:hover { opacity:.85; }
+.btn-primary { background:var(--primary); color:#fff; }
+.btn-success { background:var(--success); color:#fff; }
+.btn-ghost { background:transparent; border:1px solid var(--border); color:var(--text); }
+.btn-ghost:hover { background:var(--bg); }
+.btn-sm { padding:4px 10px; font-size:12px; }
+.btn-dg { background:#FEF2F2; color:var(--danger); border:1px solid #FECACA; }
 
-#content { flex: 1; overflow-y: auto; padding: 20px 24px; }
+/* FORMS */
+.fg { margin-bottom:12px; }
+.fg label { display:block; font-size:11px; font-weight:600; color:var(--muted); margin-bottom:4px; text-transform:uppercase; letter-spacing:.4px; }
+.fg input,.fg select,.fg textarea { width:100%; padding:8px 11px; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:inherit; color:var(--text); background:var(--surface); outline:none; transition:border-color .15s,box-shadow .15s; }
+.fg input:focus,.fg select:focus,.fg textarea:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(29,78,216,.1); }
+.fg textarea { resize:vertical; }
+.grid2 { display:grid; grid-template-columns:1fr 1fr; gap:11px; }
+.grid3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:11px; }
 
-/* ── CARDS / SURFACES ───────────────────────────── */
-.card {
-  background: var(--surface);
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  padding: 18px 20px;
-}
-.card-title { font-size: 13px; font-weight: 600; margin-bottom: 14px; color: var(--text); }
+/* TABLES */
+.tbl-wrap { background:var(--surface); border-radius:var(--radius); border:1px solid var(--border); overflow:hidden; }
+table { width:100%; border-collapse:collapse; }
+thead { background:#F8FAFC; }
+th { padding:9px 13px; text-align:left; font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; border-bottom:1px solid var(--border); }
+td { padding:9px 13px; font-size:13px; border-bottom:1px solid #F1F5F9; }
+tr:last-child td { border-bottom:none; }
+tbody tr:hover td { background:#F8FAFC; }
 
-/* ── BUTTONS ────────────────────────────────────── */
-.btn {
-  display: inline-flex; align-items: center; gap: 6px;
-  padding: 7px 14px; border-radius: 6px; border: none;
-  font-size: 13px; font-weight: 500; font-family: inherit;
-  cursor: pointer; transition: opacity 0.15s, background 0.15s;
-  white-space: nowrap;
-}
-.btn:hover { opacity: 0.88; }
-.btn-primary { background: var(--primary); color: #fff; }
-.btn-success { background: var(--success); color: #fff; }
-.btn-ghost { background: transparent; border: 1px solid var(--border); color: var(--text); }
-.btn-ghost:hover { background: var(--bg); }
-.btn-sm { padding: 4px 10px; font-size: 12px; }
-.btn-danger-ghost { background: #FEF2F2; color: var(--danger); border: 1px solid #FECACA; }
+/* BADGES */
+.badge { display:inline-block; padding:2px 8px; border-radius:20px; font-size:11px; font-weight:600; }
+.bg-green { background:#D1FAE5; color:#065F46; }
+.bg-amber { background:#FEF3C7; color:#92400E; }
+.bg-red   { background:#FEE2E2; color:#991B1B; }
+.bg-blue  { background:#DBEAFE; color:#1E40AF; }
+.bg-purple{ background:#EDE9FE; color:#5B21B6; }
 
-/* ── FORMS ──────────────────────────────────────── */
-.fg { margin-bottom: 13px; }
-.fg label { display: block; font-size: 12px; font-weight: 500; color: var(--muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 0.4px; }
-.fg input, .fg select, .fg textarea {
-  width: 100%; padding: 8px 11px;
-  border: 1px solid var(--border); border-radius: 6px;
-  font-size: 13px; font-family: inherit; color: var(--text);
-  background: var(--surface); outline: none;
-  transition: border-color 0.15s, box-shadow 0.15s;
-}
-.fg input:focus, .fg select:focus, .fg textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(29,78,216,0.1);
-}
-.fg textarea { resize: vertical; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+/* PAGE HEADER */
+.ph { display:flex; align-items:center; justify-content:space-between; margin-bottom:15px; }
+.ph-title { font-size:18px; font-weight:700; }
+.ph-actions { display:flex; align-items:center; gap:8px; }
 
-/* ── TABLES ─────────────────────────────────────── */
-.tbl-wrap { background: var(--surface); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; }
-table { width: 100%; border-collapse: collapse; }
-thead { background: #F8FAFC; }
-th { padding: 10px 14px; text-align: left; font-size: 11px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
-td { padding: 10px 14px; font-size: 13px; border-bottom: 1px solid #F1F5F9; }
-tr:last-child td { border-bottom: none; }
-tbody tr:hover td { background: #F8FAFC; }
+/* STATS */
+.stats-row { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:16px; }
+.stat { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); padding:14px 16px; display:flex; align-items:flex-start; gap:11px; }
+.stat-icon { font-size:20px; margin-top:2px; }
+.stat-val { font-size:21px; font-weight:800; line-height:1; }
+.stat-lbl { font-size:11px; color:var(--muted); margin-top:3px; }
 
-/* ── BADGES ─────────────────────────────────────── */
-.badge { display: inline-block; padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 600; }
-.badge-green  { background: #D1FAE5; color: #065F46; }
-.badge-amber  { background: #FEF3C7; color: #92400E; }
-.badge-red    { background: #FEE2E2; color: #991B1B; }
-.badge-blue   { background: #DBEAFE; color: #1E40AF; }
-.badge-purple { background: #EDE9FE; color: #5B21B6; }
+/* MODAL */
+.overlay { position:fixed; inset:0; background:rgba(15,23,42,.55); z-index:1000; display:flex; align-items:center; justify-content:center; }
+.modal { background:var(--surface); border-radius:10px; width:540px; max-height:90vh; overflow-y:auto; box-shadow:0 20px 60px rgba(0,0,0,.25); }
+.modal-lg { width:640px; } .modal-sm { width:400px; }
+.mh { padding:16px 20px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.mh h3 { font-size:15px; font-weight:700; }
+.mclose { background:none; border:none; font-size:20px; color:var(--muted); cursor:pointer; padding:2px 5px; border-radius:4px; }
+.mclose:hover { background:var(--bg); }
+.mb { padding:18px 20px; }
+.mf { padding:13px 20px; border-top:1px solid var(--border); display:flex; justify-content:flex-end; gap:8px; }
 
-/* ── PAGE HEADER ─────────────────────────────────── */
-.ph { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
-.ph-title { font-size: 18px; font-weight: 700; }
-.ph-actions { display: flex; align-items: center; gap: 8px; }
+/* POS */
+.pos-wrap { display:grid; grid-template-columns:1fr 355px; gap:12px; height:calc(100vh - 88px); }
+.pos-left { display:flex; flex-direction:column; gap:9px; min-height:0; }
+.pos-searchbar { display:flex; gap:8px; }
+.pos-searchbar input { flex:1; padding:8px 12px; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:inherit; outline:none; }
+.pos-searchbar input:focus { border-color:var(--primary); box-shadow:0 0 0 3px rgba(29,78,216,.1); }
+.pos-searchbar select { width:145px; padding:8px 11px; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:inherit; outline:none; background:var(--surface); }
+.prod-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; overflow-y:auto; flex:1; align-content:start; }
+.prod-tile { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--radius); padding:10px 11px; cursor:pointer; transition:border-color .15s,transform .1s; user-select:none; }
+.prod-tile:hover { border-color:var(--primary); transform:translateY(-1px); }
+.prod-tile .pn { font-size:12px; font-weight:600; line-height:1.3; }
+.prod-tile .pc { font-size:11px; color:var(--muted); margin-top:1px; }
+.prod-tile .pp { font-size:14px; font-weight:700; color:var(--primary); margin-top:5px; }
+.prod-tile .ps { font-size:11px; margin-top:1px; }
 
-/* ── STAT CARDS ──────────────────────────────────── */
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 18px; }
-.stat {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 16px 18px;
-  display: flex; align-items: flex-start; gap: 12px;
-}
-.stat-icon { font-size: 22px; margin-top: 2px; }
-.stat-val { font-size: 22px; font-weight: 800; line-height: 1; color: var(--text); }
-.stat-lbl { font-size: 11px; color: var(--muted); margin-top: 3px; }
+/* CART */
+.cart { background:var(--surface); border:1px solid var(--border); border-radius:var(--radius); display:flex; flex-direction:column; overflow:hidden; }
+.cart-head { padding:11px 13px; border-bottom:1px solid var(--border); flex-shrink:0; }
+.cart-head-row { display:flex; align-items:center; justify-content:space-between; margin-bottom:8px; }
+.cart-head h3 { font-size:13px; font-weight:700; }
+.cust-row { display:flex; gap:6px; align-items:center; }
+.cust-row select { flex:1; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:12px; font-family:inherit; outline:none; min-width:0; }
+.cust-row select:focus { border-color:var(--primary); }
+.add-cust-btn { padding:6px 9px; border:1px solid var(--border); border-radius:6px; background:var(--surface); cursor:pointer; font-size:13px; flex-shrink:0; }
+.add-cust-btn:hover { background:var(--bg); }
+.cart-body { flex:1; overflow-y:auto; padding:7px; }
+.cart-item { display:flex; align-items:center; gap:6px; padding:7px 8px; background:#F8FAFC; border-radius:6px; margin-bottom:5px; }
+.ci-info { flex:1; min-width:0; }
+.ci-name { font-size:12px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.ci-price { font-size:11px; color:var(--muted); }
+.ci-qty { display:flex; align-items:center; gap:3px; flex-shrink:0; }
+.qbtn { width:21px; height:21px; border:1px solid var(--border); background:var(--surface); border-radius:4px; cursor:pointer; font-size:14px; display:flex; align-items:center; justify-content:center; }
+.qbtn:hover { background:var(--bg); }
+.qi { width:34px; height:21px; text-align:center; border:1px solid var(--border); border-radius:4px; font-size:12px; font-family:inherit; padding:0; outline:none; }
+.ci-total { font-size:12px; font-weight:700; color:var(--primary); min-width:52px; text-align:right; flex-shrink:0; }
+.ci-del { color:var(--danger); cursor:pointer; font-size:15px; opacity:.5; }
+.ci-del:hover { opacity:1; }
+.cart-foot { padding:11px 13px; border-top:1px solid var(--border); flex-shrink:0; }
+.sum-row { display:flex; justify-content:space-between; align-items:center; margin-bottom:6px; font-size:13px; }
+.sum-row.tot { font-size:16px; font-weight:800; border-top:1.5px solid var(--border); padding-top:7px; margin-top:3px; }
+.disc-in { width:75px; padding:3px 7px; border:1px solid var(--border); border-radius:5px; font-size:12px; text-align:right; font-family:inherit; outline:none; }
+.disc-in:focus { border-color:var(--primary); }
+.pay-sel,.pay-in { width:100%; padding:7px 10px; border:1px solid var(--border); border-radius:6px; font-size:13px; font-family:inherit; background:var(--surface); outline:none; margin-bottom:6px; }
+.pay-sel:focus,.pay-in:focus { border-color:var(--primary); }
+.ckbtn { width:100%; padding:11px; background:var(--primary); color:#fff; border:none; border-radius:7px; font-size:14px; font-weight:700; font-family:inherit; cursor:pointer; margin-top:4px; }
+.ckbtn:hover { background:var(--primary-light); }
+.bal-hint { font-size:11px; margin-top:3px; font-weight:600; }
 
-/* ── MODAL ───────────────────────────────────────── */
-.overlay {
-  position: fixed; inset: 0;
-  background: rgba(15,23,42,0.55);
-  z-index: 1000;
-  display: flex; align-items: center; justify-content: center;
-}
-.modal {
-  background: var(--surface);
-  border-radius: 10px;
-  width: 540px;
-  max-height: 90vh;
-  overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-}
-.modal-lg { width: 640px; }
-.modal-sm { width: 420px; }
-.mh { padding: 18px 22px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
-.mh h3 { font-size: 16px; font-weight: 700; }
-.mclose { background: none; border: none; font-size: 20px; color: var(--muted); cursor: pointer; line-height: 1; padding: 2px 6px; border-radius: 4px; }
-.mclose:hover { background: var(--bg); }
-.mb { padding: 20px 22px; }
-.mf { padding: 14px 22px; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: 8px; }
+/* TOAST */
+.toast { position:fixed; bottom:18px; right:18px; padding:10px 16px; border-radius:8px; font-size:13px; font-weight:500; color:#fff; background:var(--text); z-index:9999; animation:tIn .2s ease; pointer-events:none; }
+@keyframes tIn { from{transform:translateY(10px);opacity:0} to{transform:none;opacity:1} }
 
-/* ── POS LAYOUT ──────────────────────────────────── */
-.pos-wrap {
-  display: grid;
-  grid-template-columns: 1fr 360px;
-  gap: 14px;
-  height: calc(100vh - 92px);
-}
-.pos-left { display: flex; flex-direction: column; gap: 10px; min-height: 0; }
-.pos-searchbar { display: flex; gap: 8px; }
-.pos-searchbar input { flex: 1; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; }
-.pos-searchbar input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(29,78,216,0.1); }
-.pos-searchbar select { width: 150px; padding: 9px 12px; border: 1px solid var(--border); border-radius: 6px; font-size: 13px; font-family: inherit; outline: none; background: var(--surface); }
-.prod-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 8px;
-  overflow-y: auto;
-  flex: 1;
-  align-content: start;
-  padding-right: 2px;
-}
-.prod-tile {
-  background: var(--surface);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 11px 12px;
-  cursor: pointer;
-  transition: border-color 0.15s, transform 0.1s;
-  user-select: none;
-}
-.prod-tile:hover { border-color: var(--primary); transform: translateY(-1px); }
-.prod-tile .pn { font-size: 12px; font-weight: 600; line-height: 1.35; }
-.prod-tile .pc { font-size: 11px; color: var(--muted); margin-top: 1px; }
-.prod-tile .pp { font-size: 14px; font-weight: 700; color: var(--primary); margin-top: 5px; }
-.prod-tile .ps { font-size: 11px; margin-top: 1px; }
+/* ALERT */
+.alert { padding:10px 13px; border-radius:6px; font-size:13px; margin-bottom:13px; display:flex; align-items:center; gap:8px; }
+.alert-w { background:#FEF3C7; color:#92400E; border:1px solid #FDE68A; }
 
-/* ── CART ────────────────────────────────────────── */
-.cart {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-.cart-head {
-  padding: 13px 14px;
-  border-bottom: 1px solid var(--border);
-  flex-shrink: 0;
-}
-.cart-head-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 9px; }
-.cart-head h3 { font-size: 14px; font-weight: 700; }
-.cart-body { flex: 1; overflow-y: auto; padding: 8px; }
-.cart-item {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 8px 9px;
-  background: #F8FAFC;
-  border-radius: 6px;
-  margin-bottom: 5px;
-}
-.ci-info { flex: 1; min-width: 0; }
-.ci-name { font-size: 12px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ci-price { font-size: 11px; color: var(--muted); }
-.ci-qty { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
-.qbtn {
-  width: 22px; height: 22px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 14px;
-  display: flex; align-items: center; justify-content: center;
-  line-height: 1;
-  color: var(--text);
-}
-.qbtn:hover { background: var(--bg); }
-.qi {
-  width: 36px; height: 22px;
-  text-align: center;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  font-size: 12px;
-  font-family: inherit;
-  padding: 0 2px;
-  outline: none;
-}
-.ci-total { font-size: 12px; font-weight: 700; color: var(--primary); min-width: 54px; text-align: right; flex-shrink: 0; }
-.ci-del { color: var(--danger); cursor: pointer; font-size: 15px; opacity: 0.6; flex-shrink: 0; }
-.ci-del:hover { opacity: 1; }
+/* EMPTY */
+.empty { text-align:center; padding:44px 20px; color:var(--muted); }
+.ei { font-size:38px; margin-bottom:9px; }
 
-.cart-foot { padding: 12px 14px; border-top: 1px solid var(--border); flex-shrink: 0; }
-.sum-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 7px; font-size: 13px; }
-.sum-row.total-row { font-size: 17px; font-weight: 800; border-top: 1.5px solid var(--border); padding-top: 8px; margin-top: 4px; }
-.disc-input { width: 80px; padding: 3px 7px; border: 1px solid var(--border); border-radius: 5px; font-size: 12px; text-align: right; font-family: inherit; outline: none; }
-.disc-input:focus { border-color: var(--primary); }
-.pay-select, .pay-input {
-  width: 100%; padding: 8px 11px;
-  border: 1px solid var(--border); border-radius: 6px;
-  font-size: 13px; font-family: inherit;
-  background: var(--surface); outline: none; margin-bottom: 7px;
-}
-.pay-select:focus, .pay-input:focus { border-color: var(--primary); }
-.checkout-btn {
-  width: 100%; padding: 12px;
-  background: var(--primary); color: #fff;
-  border: none; border-radius: 7px;
-  font-size: 14px; font-weight: 700; font-family: inherit;
-  cursor: pointer; transition: background 0.15s;
-  margin-top: 4px;
-}
-.checkout-btn:hover { background: var(--primary-light); }
-.balance-hint { font-size: 11px; margin-top: 4px; font-weight: 600; }
+/* FIREBASE SETUP BANNER */
+.fb-banner { background:#EFF6FF; border:1px solid #BFDBFE; border-radius:8px; padding:14px 18px; margin-bottom:16px; font-size:13px; }
+.fb-banner h4 { color:#1E40AF; font-size:14px; margin-bottom:8px; }
+.fb-banner ol { padding-left:18px; color:#1D4ED8; }
+.fb-banner ol li { margin-bottom:4px; }
+.fb-banner code { background:#DBEAFE; padding:2px 6px; border-radius:4px; font-size:12px; }
 
-/* ── TOAST ───────────────────────────────────────── */
-.toast {
-  position: fixed; bottom: 20px; right: 20px;
-  padding: 11px 18px; border-radius: 8px;
-  font-size: 13px; font-weight: 500; color: #fff;
-  background: var(--text); z-index: 9999;
-  animation: tIn .25s ease; pointer-events: none;
-}
-@keyframes tIn { from { transform: translateY(12px); opacity: 0; } to { transform: none; opacity: 1; } }
-
-/* ── ALERT ───────────────────────────────────────── */
-.alert { padding: 10px 14px; border-radius: 6px; font-size: 13px; margin-bottom: 14px; display: flex; align-items: center; gap: 8px; }
-.alert-warn { background: #FEF3C7; color: #92400E; border: 1px solid #FDE68A; }
-
-/* ── EMPTY STATE ─────────────────────────────────── */
-.empty { text-align: center; padding: 48px 20px; color: var(--muted); }
-.empty-icon { font-size: 40px; margin-bottom: 10px; }
-
-/* ── SEARCH INPUT ────────────────────────────────── */
-.search-wrap { position: relative; }
-.search-wrap input { padding-left: 34px; }
-.search-wrap::before { content: '🔍'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); font-size: 13px; pointer-events: none; }
-
-/* ── PRINT ───────────────────────────────────────── */
+/* PRINT — hidden div, visible only when printing */
+#pf { display:none; }
 @media print {
-  #app > #sidebar, #topbar, .no-print { display: none !important; }
-  #content { overflow: visible; padding: 0; }
-  body { overflow: visible; height: auto; }
+  #app,#modal-root { display:none !important; }
+  #pf { display:block !important; font-family:sans-serif; padding:20px; max-width:420px; }
 }
 
-/* ── SCROLLBAR ───────────────────────────────────── */
-::-webkit-scrollbar { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: #CBD5E1; border-radius: 4px; }
+::-webkit-scrollbar { width:5px; height:5px; }
+::-webkit-scrollbar-track { background:transparent; }
+::-webkit-scrollbar-thumb { background:#CBD5E1; border-radius:4px; }
 </style>
 </head>
 <body>
+
+<!-- Print frame — only shows during print -->
+<div id="pf"></div>
+
 <div id="app">
   <aside id="sidebar">
     <div class="sna-logo">
-      <div class="shop-name">🏪 S.N.A. Traders</div>
-      <div class="shop-sub">Stationery Wholesale</div>
+      <div class="sn">🏪 S.N.A. Traders</div>
+      <div class="ss">Stationery Wholesale</div>
     </div>
     <nav class="nav">
       <div class="nav-item active" data-page="dashboard"><span class="ni">📊</span> Dashboard</div>
@@ -375,10 +212,14 @@ tbody tr:hover td { background: #F8FAFC; }
 
   <div id="main">
     <div id="topbar">
-      <span id="page-name">Dashboard</span>
-      <div class="topbar-right">
-        <span class="topbar-clock" id="clk-date"></span>
-        <span class="topbar-clock" id="clk-time"></span>
+      <span id="tn">Dashboard</span>
+      <div class="topbar-r">
+        <span class="clk" id="clk-d"></span>
+        <span class="clk" id="clk-t"></span>
+        <button class="sync-btn" onclick="manualSync()" title="Sync data across devices">
+          <span class="sync-dot sync-off" id="sync-dot"></span>
+          <span id="sync-lbl">Offline</span>
+        </button>
       </div>
     </div>
     <div id="content"></div>
@@ -387,113 +228,165 @@ tbody tr:hover td { background: #F8FAFC; }
 <div id="modal-root"></div>
 
 <script>
-// ═══════════════════════════════════════════════════
-// STORAGE
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// ⚙️ FIREBASE CONFIG
+// Go to Settings page to enter your Firebase URL
+// Format: https://your-project-default-rtdb.firebaseio.com
+// ═══════════════════════════════════════════════
+let FB_URL = localStorage.getItem('sna_fb_url') || '';
+
+// ═══════════════════════════════════════════════
+// STORAGE — localStorage (instant) + Firebase (sync)
+// ═══════════════════════════════════════════════
 const K = { products:'sna_p', stock:'sna_s', invoices:'sna_i', customers:'sna_c', settings:'sna_cfg', invNum:'sna_n' };
+
 const db = {
   get: k => JSON.parse(localStorage.getItem(k) || '[]'),
-  set: (k,v) => localStorage.setItem(k, JSON.stringify(v)),
-  getObj: (k, d={}) => JSON.parse(localStorage.getItem(k) || JSON.stringify(d)),
-  setObj: (k,v) => localStorage.setItem(k, JSON.stringify(v))
+  set: (k,v) => { localStorage.setItem(k, JSON.stringify(v)); fbPush(k,v); },
+  getObj: (k,d={}) => JSON.parse(localStorage.getItem(k) || JSON.stringify(d)),
+  setObj: (k,v) => { localStorage.setItem(k, JSON.stringify(v)); fbPush(k,v); }
 };
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
-const nextInv = () => { const n = parseInt(localStorage.getItem(K.invNum)||'0')+1; localStorage.setItem(K.invNum,n); return `SNA-${String(n).padStart(4,'0')}`; };
-const cfg = () => db.getObj(K.settings, { shopName:'S.N.A. Traders', address:'', phone:'', taxRate:0 });
-const fmt = n => 'Rs. ' + (parseFloat(n)||0).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
 
-// ═══════════════════════════════════════════════════
-// NAVIGATION
-// ═══════════════════════════════════════════════════
-const PAGE_TITLES = { dashboard:'Dashboard', pos:'New Sale', products:'Products', stock:'Stock In', invoices:'Invoices', customers:'Customers', reports:'Reports', settings:'Settings' };
-let curPage = 'dashboard';
-
-document.querySelectorAll('.nav-item').forEach(el => {
-  el.addEventListener('click', () => go(el.dataset.page));
-});
-
-function go(page) {
-  curPage = page;
-  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page === page));
-  document.getElementById('page-name').textContent = PAGE_TITLES[page] || page;
-  document.getElementById('content').innerHTML = '';
-  document.getElementById('content').innerHTML = PAGES[page]?.() || '';
-  AFTER[page]?.();
+// Push to Firebase in background (non-blocking)
+function fbPush(k, v) {
+  if (!FB_URL) return;
+  fetch(`${FB_URL}/snapos/${k}.json`, { method:'PUT', body:JSON.stringify(v) })
+    .catch(()=>{});
 }
 
-// ═══════════════════════════════════════════════════
+// Pull ALL data from Firebase and update localStorage
+async function syncFromFB() {
+  if (!FB_URL) { setSyncStatus('off'); return; }
+  setSyncStatus('ing');
+  try {
+    const r = await fetch(`${FB_URL}/snapos.json`);
+    if (!r.ok) throw new Error('fetch failed');
+    const data = await r.json();
+    if (data) {
+      Object.entries(data).forEach(([k,v]) => localStorage.setItem(k, JSON.stringify(v)));
+    }
+    setSyncStatus('ok');
+    return true;
+  } catch(e) {
+    setSyncStatus('err');
+    return false;
+  }
+}
+
+async function manualSync() {
+  const ok = await syncFromFB();
+  if (ok) { toast('✅ Synced from Firebase!'); go(curPage); }
+  else toast('❌ Sync failed — check Firebase URL in Settings', 'err');
+}
+
+function setSyncStatus(s) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-lbl');
+  if (!dot) return;
+  dot.className = 'sync-dot sync-' + s;
+  lbl.textContent = { ok:'Synced', ing:'Syncing…', err:'Sync Error', off:'No Sync' }[s] || s;
+}
+
+// Auto-sync on startup + every 5 min
+syncFromFB();
+setInterval(syncFromFB, 5 * 60 * 1000);
+
+// ═══════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2);
+const nextInv = () => { const n=parseInt(localStorage.getItem(K.invNum)||'0')+1; localStorage.setItem(K.invNum,n); fbPush(K.invNum,n); return `SNA-${String(n).padStart(4,'0')}`; };
+const cfg = () => db.getObj(K.settings, { shopName:'S.N.A. Traders', address:'', phone:'', taxRate:0 });
+const fmt = n => 'Rs. ' + (parseFloat(n)||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+
+// ═══════════════════════════════════════════════
 // CLOCK
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function tick() {
   const now = new Date();
-  const d = document.getElementById('clk-date');
-  const t = document.getElementById('clk-time');
+  const d=document.getElementById('clk-d'), t=document.getElementById('clk-t');
   if(d) d.textContent = now.toLocaleDateString('en-US',{weekday:'short',day:'numeric',month:'short'});
   if(t) t.textContent = now.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
 }
 setInterval(tick,1000); tick();
 
-// ═══════════════════════════════════════════════════
-// MODAL
-// ═══════════════════════════════════════════════════
-function modal(html) { document.getElementById('modal-root').innerHTML = html; }
-function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+// ═══════════════════════════════════════════════
+// NAV
+// ═══════════════════════════════════════════════
+const TITLES = { dashboard:'Dashboard', pos:'New Sale', products:'Products', stock:'Stock In', invoices:'Invoices', customers:'Customers', reports:'Reports', settings:'Settings' };
+let curPage = 'dashboard';
+document.querySelectorAll('.nav-item').forEach(el => el.addEventListener('click', () => go(el.dataset.page)));
 
-// ═══════════════════════════════════════════════════
-// TOAST
-// ═══════════════════════════════════════════════════
-function toast(msg, type='ok') {
-  const el = document.createElement('div');
-  el.className = 'toast';
-  el.style.background = type==='warn'?'#D97706':type==='err'?'#DC2626':'#0F172A';
-  el.textContent = msg;
-  document.body.appendChild(el);
-  setTimeout(()=>el.remove(), 2800);
+function go(page) {
+  curPage = page;
+  document.querySelectorAll('.nav-item').forEach(el => el.classList.toggle('active', el.dataset.page===page));
+  document.getElementById('tn').textContent = TITLES[page]||page;
+  document.getElementById('content').innerHTML = PAGES[page]?.() || '';
+  AFTER[page]?.();
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// MODAL / TOAST
+// ═══════════════════════════════════════════════
+function modal(h) { document.getElementById('modal-root').innerHTML = h; }
+function closeModal() { document.getElementById('modal-root').innerHTML = ''; }
+function toast(msg, type='ok') {
+  const el=document.createElement('div'); el.className='toast';
+  el.style.background = type==='warn'?'#D97706':type==='err'?'#DC2626':'#0F172A';
+  el.textContent=msg; document.body.appendChild(el);
+  setTimeout(()=>el.remove(),2800);
+}
+
+// ═══════════════════════════════════════════════
+// PRINT — Direct to printer (no save-as default)
+// ═══════════════════════════════════════════════
+function printInv() {
+  const area = document.getElementById('inv-area');
+  if (!area) return;
+  document.getElementById('pf').innerHTML = `
+    <style>body{font-family:sans-serif;padding:20px;max-width:420px;}table{width:100%;border-collapse:collapse;}th,td{padding:5px 7px;}</style>
+    ${area.innerHTML}`;
+  window.print();
+  setTimeout(()=>{ document.getElementById('pf').innerHTML=''; }, 1000);
+}
+
+// ═══════════════════════════════════════════════
 // DASHBOARD
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageDashboard() {
-  const invs = db.get(K.invoices), prods = db.get(K.products);
-  const today = new Date().toDateString();
-  const todayInvs = invs.filter(i => new Date(i.at).toDateString()===today);
-  const todayRev = todayInvs.reduce((s,i)=>s+i.total,0);
-  const totalRev = invs.reduce((s,i)=>s+i.total,0);
-  const low = prods.filter(p => (p.stock||0) <= (p.minStock||5));
-  const credit = invs.filter(i=>i.status!=='paid').reduce((s,i)=>s+(i.balance||0),0);
+  const invs=db.get(K.invoices), prods=db.get(K.products);
+  const today=new Date().toDateString();
+  const tInvs=invs.filter(i=>new Date(i.at).toDateString()===today);
+  const tRev=tInvs.reduce((s,i)=>s+i.total,0);
+  const totRev=invs.reduce((s,i)=>s+i.total,0);
+  const low=prods.filter(p=>(p.stock||0)<=(p.minStock||5));
+  const cred=invs.filter(i=>i.status!=='paid').reduce((s,i)=>s+(i.balance||0),0);
+  const fbSet = FB_URL ? '' : `<div class="fb-banner"><h4>🔥 Firebase Setup (Optional — for multi-device sync)</h4><ol><li>Go to <strong>firebase.google.com</strong> → Create project</li><li>Build → Realtime Database → Create Database → Start in <strong>test mode</strong></li><li>Copy your database URL (looks like: <code>https://xyz-default-rtdb.firebaseio.com</code>)</li><li>Go to ⚙️ <strong>Settings</strong> in this app → paste the URL → Save</li><li>All 3 devices will sync automatically!</li></ol></div>`;
 
   return `
+  ${fbSet}
   <div class="stats-row">
-    <div class="stat"><div class="stat-icon">💰</div><div><div class="stat-val">${fmt(todayRev)}</div><div class="stat-lbl">Today's Revenue</div></div></div>
-    <div class="stat"><div class="stat-icon">🧾</div><div><div class="stat-val">${todayInvs.length}</div><div class="stat-lbl">Today's Invoices</div></div></div>
-    <div class="stat"><div class="stat-icon">📦</div><div><div class="stat-val">${prods.length}</div><div class="stat-lbl">Total Products</div></div></div>
-    <div class="stat"><div class="stat-icon">⚠️</div><div><div class="stat-val">${low.length}</div><div class="stat-lbl">Low Stock Items</div></div></div>
+    <div class="stat"><div class="stat-icon">💰</div><div><div class="stat-val">${fmt(tRev)}</div><div class="stat-lbl">Today's Revenue</div></div></div>
+    <div class="stat"><div class="stat-icon">🧾</div><div><div class="stat-val">${tInvs.length}</div><div class="stat-lbl">Today's Bills</div></div></div>
+    <div class="stat"><div class="stat-icon">📦</div><div><div class="stat-val">${prods.length}</div><div class="stat-lbl">Products</div></div></div>
+    <div class="stat"><div class="stat-icon">⚠️</div><div><div class="stat-val">${low.length}</div><div class="stat-lbl">Low Stock</div></div></div>
   </div>
-
-  ${low.length ? `<div class="alert alert-warn">⚠️ <strong>${low.length} product${low.length>1?'s':''} low/out of stock:</strong> ${low.map(p=>p.name).join(', ')}</div>` : ''}
-
-  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:14px;">
+  ${low.length?`<div class="alert alert-w">⚠️ <strong>${low.length} item${low.length>1?'s':''} low/out:</strong> ${low.map(p=>p.name).join(', ')}</div>`:''}
+  <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:13px;">
     <div class="card">
       <div class="card-title">Recent Invoices</div>
-      ${invs.length===0 ? `<div class="empty"><div class="empty-icon">🧾</div><p>No sales yet</p></div>` :
+      ${invs.length===0?`<div class="empty"><div class="ei">🧾</div><p>No sales yet</p></div>`:
         `<table><thead><tr><th>Invoice</th><th>Customer</th><th>Total</th><th>Status</th></tr></thead><tbody>
-          ${invs.slice(-8).reverse().map(i=>`
-            <tr>
-              <td><strong>${i.no}</strong></td>
-              <td>${i.custName||'Walk-in'}</td>
-              <td>${fmt(i.total)}</td>
-              <td><span class="badge ${i.status==='paid'?'badge-green':i.status==='partial'?'badge-amber':'badge-red'}">${i.status}</span></td>
-            </tr>`).join('')}
+          ${invs.slice(-8).reverse().map(i=>`<tr><td><strong>${i.no}</strong></td><td>${i.custName||'Walk-in'}</td><td>${fmt(i.total)}</td><td><span class="badge ${i.status==='paid'?'bg-green':i.status==='partial'?'bg-amber':'bg-red'}">${i.status}</span></td></tr>`).join('')}
         </tbody></table>`}
     </div>
     <div class="card">
       <div class="card-title">Summary</div>
-      <div class="sum-row"><span>All-time Revenue</span><strong>${fmt(totalRev)}</strong></div>
+      <div class="sum-row"><span>All-time Revenue</span><strong>${fmt(totRev)}</strong></div>
       <div class="sum-row"><span>Total Invoices</span><strong>${invs.length}</strong></div>
-      <div class="sum-row"><span>Outstanding Credit</span><strong style="color:var(--danger)">${fmt(credit)}</strong></div>
+      <div class="sum-row"><span>Outstanding Credit</span><strong style="color:var(--danger)">${fmt(cred)}</strong></div>
       <div class="sum-row"><span>Products</span><strong>${prods.length}</strong></div>
-      <div style="margin-top:14px;display:flex;gap:8px;">
+      <div style="margin-top:13px;display:flex;gap:7px;">
         <button class="btn btn-primary" onclick="go('pos')">💳 New Sale</button>
         <button class="btn btn-ghost" onclick="go('products')">+ Product</button>
       </div>
@@ -501,14 +394,15 @@ function pageDashboard() {
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // POS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 let cart = [];
 
 function pagePOS() {
-  const prods = db.get(K.products);
-  const cats = [...new Set(prods.map(p=>p.cat).filter(Boolean))];
+  const prods=db.get(K.products);
+  const cats=[...new Set(prods.map(p=>p.cat).filter(Boolean))];
+  const custs=db.get(K.customers);
   return `
   <div class="pos-wrap">
     <div class="pos-left">
@@ -519,9 +413,7 @@ function pagePOS() {
           ${cats.map(c=>`<option value="${c}">${c}</option>`).join('')}
         </select>
       </div>
-      <div class="prod-grid" id="prod-grid">
-        ${renderProdGrid(prods)}
-      </div>
+      <div class="prod-grid" id="prod-grid">${renderProdGrid(prods)}</div>
     </div>
 
     <div class="cart">
@@ -530,41 +422,44 @@ function pagePOS() {
           <h3>🛒 Cart</h3>
           <button class="btn btn-sm btn-ghost" onclick="clearCart()">Clear</button>
         </div>
-        <select id="cart-cust" class="pay-select" style="margin:0;">
-          <option value="">👤 Walk-in Customer</option>
-          ${db.get(K.customers).map(c=>`<option value="${c.id}">${c.name}${c.phone?' · '+c.phone:''}</option>`).join('')}
-        </select>
+        <div class="cust-row">
+          <select id="cart-cust">
+            <option value="">👤 Walk-in Customer</option>
+            ${custs.map(c=>`<option value="${c.id}">${c.name}${c.phone?' · '+c.phone:''}</option>`).join('')}
+          </select>
+          <button class="add-cust-btn" onclick="quickAddCust()" title="Add new customer">➕</button>
+        </div>
       </div>
       <div class="cart-body" id="cart-body"></div>
       <div class="cart-foot">
         <div class="sum-row"><span>Subtotal</span><span id="cs-sub">Rs. 0.00</span></div>
         <div class="sum-row">
           <span>Discount (Rs.)</span>
-          <input type="number" class="disc-input" id="cs-disc" value="0" min="0" oninput="recalc()">
+          <input type="number" class="disc-in" id="cs-disc" value="0" min="0" oninput="recalc()">
         </div>
-        <div class="sum-row total-row"><span>Total</span><span id="cs-total">Rs. 0.00</span></div>
-        <select class="pay-select" id="pay-meth" onchange="togglePay()">
+        <div class="sum-row tot"><span>Total</span><span id="cs-total">Rs. 0.00</span></div>
+        <select class="pay-sel" id="pay-meth" onchange="togglePay()">
           <option value="cash">💵 Cash</option>
           <option value="card">💳 Card / Bank Transfer</option>
           <option value="credit">📋 Credit (Pay Later)</option>
         </select>
         <div id="pay-row">
-          <input type="number" class="pay-input" id="paid-amt" placeholder="Amount received..." oninput="recalc()">
-          <div class="balance-hint" id="bal-hint"></div>
+          <input type="number" class="pay-in" id="paid-amt" placeholder="Amount received..." oninput="recalc()">
+          <div class="bal-hint" id="bal-hint"></div>
         </div>
-        <button class="checkout-btn" onclick="checkout()">✅ Complete Sale</button>
+        <button class="ckbtn" onclick="checkout()">✅ Complete Sale</button>
       </div>
     </div>
   </div>`;
 }
 
 function renderProdGrid(prods) {
-  if(!prods.length) return `<div class="empty"><div class="empty-icon">📦</div><p>No products yet</p></div>`;
-  return prods.map(p => {
-    const sc = p.stock<=0?'color:var(--danger)':p.stock<=(p.minStock||5)?'color:var(--warning)':'color:var(--success)';
+  if (!prods.length) return `<div class="empty"><div class="ei">📦</div><p>No products yet</p></div>`;
+  return prods.map(p=>{
+    const sc=p.stock<=0?'color:var(--danger)':p.stock<=(p.minStock||5)?'color:var(--warning)':'color:var(--success)';
     return `<div class="prod-tile" onclick="addToCart('${p.id}')">
       <div class="pn">${p.name}</div>
-      <div class="pc">${p.cat||''} ${p.unit?'· '+p.unit:''}</div>
+      <div class="pc">${p.cat||''}${p.unit?' · '+p.unit:''}</div>
       <div class="pp">${fmt(p.sell)}</div>
       <div class="ps" style="${sc}">Stock: ${p.stock||0}</div>
     </div>`;
@@ -572,56 +467,34 @@ function renderProdGrid(prods) {
 }
 
 function filterProds() {
-  const q = document.getElementById('ps-q').value.toLowerCase();
-  const cat = document.getElementById('ps-cat').value;
-  const prods = db.get(K.products).filter(p =>
-    (!q || p.name.toLowerCase().includes(q) || (p.sku||'').toLowerCase().includes(q)) &&
-    (!cat || p.cat===cat)
-  );
+  const q=document.getElementById('ps-q').value.toLowerCase();
+  const cat=document.getElementById('ps-cat').value;
+  const prods=db.get(K.products).filter(p=>(!q||p.name.toLowerCase().includes(q)||(p.sku||'').toLowerCase().includes(q))&&(!cat||p.cat===cat));
   document.getElementById('prod-grid').innerHTML = renderProdGrid(prods);
 }
 
 function addToCart(id) {
-  const prods = db.get(K.products);
-  const p = prods.find(x=>x.id===id);
-  if(!p) return;
-  if((p.stock||0)<=0) { toast('⚠️ Out of stock!','warn'); return; }
-  const ex = cart.find(c=>c.id===id);
-  if(ex) {
-    if(ex.qty >= p.stock) { toast('⚠️ Not enough stock!','warn'); return; }
-    ex.qty++;
-  } else {
-    cart.push({ id, name:p.name, unit:p.unit||'pcs', price:parseFloat(p.sell||0), qty:1, maxQty:p.stock });
-  }
+  const p=db.get(K.products).find(x=>x.id===id);
+  if (!p) return;
+  if ((p.stock||0)<=0) { toast('⚠️ Out of stock!','warn'); return; }
+  const ex=cart.find(c=>c.id===id);
+  if (ex) { if(ex.qty>=p.stock){toast('⚠️ Not enough stock!','warn');return;} ex.qty++; }
+  else cart.push({id,name:p.name,unit:p.unit||'pcs',price:parseFloat(p.sell||0),qty:1,maxQty:p.stock});
   renderCart();
 }
-
-function removeFromCart(id) { cart = cart.filter(c=>c.id!==id); renderCart(); }
-function clearCart() { cart=[]; renderCart(); }
-
-function setQty(id, val) {
-  const item = cart.find(c=>c.id===id);
-  if(!item) return;
-  const q = parseInt(val)||1;
-  if(q<=0) { removeFromCart(id); return; }
-  if(q>item.maxQty) { toast('⚠️ Max stock: '+item.maxQty,'warn'); return; }
-  item.qty = q;
-  renderCart();
-}
-function adjQty(id, d) { const item=cart.find(c=>c.id===id); if(item) setQty(id, item.qty+d); }
+function removeFromCart(id){ cart=cart.filter(c=>c.id!==id); renderCart(); }
+function clearCart(){ cart=[]; renderCart(); }
+function setQty(id,val){ const item=cart.find(c=>c.id===id); if(!item)return; const q=parseInt(val)||1; if(q<=0){removeFromCart(id);return;} if(q>item.maxQty){toast('⚠️ Max: '+item.maxQty,'warn');return;} item.qty=q; renderCart(); }
+function adjQty(id,d){ const item=cart.find(c=>c.id===id); if(item) setQty(id,item.qty+d); }
 
 function renderCart() {
-  const body = document.getElementById('cart-body');
-  if(!body) return;
-  if(!cart.length) {
-    body.innerHTML = `<div class="empty" style="padding:30px 10px;"><div class="empty-icon">🛒</div><p style="font-size:12px;">Tap products to add</p></div>`;
+  const body=document.getElementById('cart-body'); if(!body)return;
+  if (!cart.length) {
+    body.innerHTML=`<div class="empty" style="padding:28px 10px;"><div class="ei">🛒</div><p style="font-size:12px;">Tap products to add</p></div>`;
   } else {
-    body.innerHTML = cart.map(c=>`
+    body.innerHTML=cart.map(c=>`
       <div class="cart-item">
-        <div class="ci-info">
-          <div class="ci-name">${c.name}</div>
-          <div class="ci-price">${fmt(c.price)} / ${c.unit}</div>
-        </div>
+        <div class="ci-info"><div class="ci-name">${c.name}</div><div class="ci-price">${fmt(c.price)} / ${c.unit}</div></div>
         <div class="ci-qty">
           <button class="qbtn" onclick="adjQty('${c.id}',-1)">−</button>
           <input class="qi" type="number" value="${c.qty}" min="1" max="${c.maxQty}" onchange="setQty('${c.id}',this.value)">
@@ -635,125 +508,116 @@ function renderCart() {
 }
 
 function recalc() {
-  const sub = cart.reduce((s,c)=>s+(c.price*c.qty),0);
-  const disc = parseFloat(document.getElementById('cs-disc')?.value||0);
-  const total = Math.max(0, sub-disc);
-  const s = document.getElementById('cs-sub'), t = document.getElementById('cs-total');
-  if(s) s.textContent = fmt(sub);
-  if(t) t.textContent = fmt(total);
-  const paid = parseFloat(document.getElementById('paid-amt')?.value||0);
-  const hint = document.getElementById('bal-hint');
-  if(hint && paid>0) {
-    const diff = paid - total;
-    hint.textContent = diff>=0 ? `Change: ${fmt(diff)}` : `Still Due: ${fmt(Math.abs(diff))}`;
-    hint.style.color = diff>=0?'var(--success)':'var(--danger)';
-  } else if(hint) hint.textContent='';
+  const sub=cart.reduce((s,c)=>s+(c.price*c.qty),0);
+  const disc=parseFloat(document.getElementById('cs-disc')?.value||0);
+  const total=Math.max(0,sub-disc);
+  const s=document.getElementById('cs-sub'),t=document.getElementById('cs-total');
+  if(s) s.textContent=fmt(sub);
+  if(t) t.textContent=fmt(total);
+  const paid=parseFloat(document.getElementById('paid-amt')?.value||0);
+  const hint=document.getElementById('bal-hint');
+  if(hint&&paid>0){ const diff=paid-total; hint.textContent=diff>=0?`Change: ${fmt(diff)}`:`Still Due: ${fmt(Math.abs(diff))}`; hint.style.color=diff>=0?'var(--success)':'var(--danger)'; }
+  else if(hint) hint.textContent='';
+}
+function togglePay(){ const m=document.getElementById('pay-meth')?.value; const row=document.getElementById('pay-row'); if(row) row.style.display=m==='credit'?'none':'block'; }
+
+// ── Quick Add Customer from POS ──────────────────
+function quickAddCust() {
+  modal(`
+  <div class="overlay">
+    <div class="modal modal-sm">
+      <div class="mh"><h3>➕ Quick Add Customer</h3><button class="mclose" onclick="closeModal()">×</button></div>
+      <div class="mb">
+        <div class="fg"><label>Name *</label><input id="qcn" placeholder="Customer name" autofocus></div>
+        <div class="fg"><label>Phone</label><input id="qcp" placeholder="07X XXX XXXX"></div>
+      </div>
+      <div class="mf">
+        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveQuickCust()">Save &amp; Select →</button>
+      </div>
+    </div>
+  </div>`);
 }
 
-function togglePay() {
-  const m = document.getElementById('pay-meth')?.value;
-  const row = document.getElementById('pay-row');
-  if(row) row.style.display = m==='credit'?'none':'block';
+function saveQuickCust() {
+  const name=document.getElementById('qcn').value.trim();
+  if (!name){ toast('⚠️ Name required!','warn'); return; }
+  const custs=db.get(K.customers);
+  const nc={ id:uid(), name, phone:document.getElementById('qcp').value.trim(), address:'', limit:0, credit:0, at:new Date().toISOString() };
+  custs.push(nc); db.set(K.customers,custs);
+  // Add option to dropdown & select it
+  const sel=document.getElementById('cart-cust');
+  if (sel) { const opt=document.createElement('option'); opt.value=nc.id; opt.textContent=nc.name+(nc.phone?' · '+nc.phone:''); sel.appendChild(opt); sel.value=nc.id; }
+  closeModal();
+  toast(`✅ ${name} added & selected!`);
 }
 
 function checkout() {
-  if(!cart.length) { toast('⚠️ Cart is empty!','warn'); return; }
-  const sub = cart.reduce((s,c)=>s+(c.price*c.qty),0);
-  const disc = parseFloat(document.getElementById('cs-disc')?.value||0);
-  const total = Math.max(0,sub-disc);
-  const meth = document.getElementById('pay-meth')?.value||'cash';
-  const paid = meth==='credit' ? 0 : parseFloat(document.getElementById('paid-amt')?.value||total);
-  const bal = Math.max(0, total-paid);
-  const custId = document.getElementById('cart-cust')?.value;
-  const custs = db.get(K.customers);
-  const cust = custs.find(c=>c.id===custId);
-  const prods = db.get(K.products);
-
-  const inv = {
-    id: uid(), no: nextInv(),
-    custId: custId||null, custName: cust?.name||'Walk-in', custPhone: cust?.phone||'',
-    items: cart.map(c=>({...c})),
-    sub, disc, total, paid, balance: bal, meth,
-    status: bal<=0?'paid':paid>0?'partial':'credit',
-    at: new Date().toISOString()
-  };
-
-  // Deduct stock
-  cart.forEach(ci => {
-    const p = prods.find(x=>x.id===ci.id);
-    if(p) p.stock = Math.max(0,(p.stock||0)-ci.qty);
-  });
-  db.set(K.products, prods);
-
-  // Update customer credit
-  if(cust && bal>0) { cust.credit=(cust.credit||0)+bal; db.set(K.customers, custs); }
-
-  const invs = db.get(K.invoices);
-  invs.push(inv);
-  db.set(K.invoices, invs);
-
-  cart = [];
-  toast(`✅ ${inv.no} — Sale complete!`);
+  if (!cart.length){ toast('⚠️ Cart is empty!','warn'); return; }
+  const sub=cart.reduce((s,c)=>s+(c.price*c.qty),0);
+  const disc=parseFloat(document.getElementById('cs-disc')?.value||0);
+  const total=Math.max(0,sub-disc);
+  const meth=document.getElementById('pay-meth')?.value||'cash';
+  const paid=meth==='credit'?0:parseFloat(document.getElementById('paid-amt')?.value||total);
+  const bal=Math.max(0,total-paid);
+  const custId=document.getElementById('cart-cust')?.value;
+  const custs=db.get(K.customers); const cust=custs.find(c=>c.id===custId);
+  const prods=db.get(K.products);
+  const inv={ id:uid(), no:nextInv(), custId:custId||null, custName:cust?.name||'Walk-in', custPhone:cust?.phone||'', items:cart.map(c=>({...c})), sub, disc, total, paid, balance:bal, meth, status:bal<=0?'paid':paid>0?'partial':'credit', at:new Date().toISOString() };
+  cart.forEach(ci=>{ const p=prods.find(x=>x.id===ci.id); if(p) p.stock=Math.max(0,(p.stock||0)-ci.qty); });
+  db.set(K.products,prods);
+  if (cust&&bal>0){ cust.credit=(cust.credit||0)+bal; db.set(K.customers,custs); }
+  const invs=db.get(K.invoices); invs.push(inv); db.set(K.invoices,invs);
+  cart=[]; toast(`✅ ${inv.no} — Sale complete!`);
   showInvModal(inv);
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // INVOICE MODAL
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function showInvModal(inv) {
-  const s = cfg();
+  const s=cfg();
   modal(`
   <div class="overlay">
     <div class="modal">
-      <div class="mh no-print">
-        <h3>${inv.no}</h3>
-        <button class="mclose" onclick="closeModal();go('pos')">×</button>
-      </div>
+      <div class="mh"><h3>${inv.no}</h3><button class="mclose" onclick="closeModal();go('pos')">×</button></div>
       <div class="mb">
         <div id="inv-area" style="font-size:13px;">
-          <div style="text-align:center;margin-bottom:14px;">
+          <div style="text-align:center;margin-bottom:12px;">
             <div style="font-size:17px;font-weight:800;">${s.shopName}</div>
             ${s.address?`<div style="font-size:11px;color:#64748b;margin-top:2px;">${s.address}</div>`:''}
             ${s.phone?`<div style="font-size:11px;color:#64748b;">📞 ${s.phone}</div>`:''}
           </div>
-          <div style="display:flex;justify-content:space-between;font-size:12px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:7px 0;margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;font-size:12px;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;padding:6px 0;margin-bottom:9px;">
             <span><strong>Invoice:</strong> ${inv.no}</span>
             <span>${new Date(inv.at).toLocaleString()}</span>
           </div>
-          ${inv.custName!=='Walk-in'?`<div style="font-size:12px;margin-bottom:10px;"><strong>Customer:</strong> ${inv.custName}${inv.custPhone?' · '+inv.custPhone:''}</div>`:''}
+          ${inv.custName!=='Walk-in'?`<div style="font-size:12px;margin-bottom:9px;"><strong>Customer:</strong> ${inv.custName}${inv.custPhone?' · '+inv.custPhone:''}</div>`:''}
           <table style="width:100%;border-collapse:collapse;font-size:12px;">
             <thead style="background:#f8fafc;">
               <tr>
-                <th style="padding:6px 8px;text-align:left;border-bottom:1px solid #e2e8f0;">Item</th>
-                <th style="padding:6px 8px;text-align:center;border-bottom:1px solid #e2e8f0;">Qty</th>
-                <th style="padding:6px 8px;text-align:right;border-bottom:1px solid #e2e8f0;">Rate</th>
-                <th style="padding:6px 8px;text-align:right;border-bottom:1px solid #e2e8f0;">Amount</th>
+                <th style="padding:5px 7px;text-align:left;border-bottom:1px solid #e2e8f0;">Item</th>
+                <th style="padding:5px 7px;text-align:center;border-bottom:1px solid #e2e8f0;">Qty</th>
+                <th style="padding:5px 7px;text-align:right;border-bottom:1px solid #e2e8f0;">Rate</th>
+                <th style="padding:5px 7px;text-align:right;border-bottom:1px solid #e2e8f0;">Amount</th>
               </tr>
             </thead>
             <tbody>
-              ${inv.items.map(it=>`
-                <tr>
-                  <td style="padding:6px 8px;">${it.name}</td>
-                  <td style="padding:6px 8px;text-align:center;">${it.qty} ${it.unit}</td>
-                  <td style="padding:6px 8px;text-align:right;">${fmt(it.price)}</td>
-                  <td style="padding:6px 8px;text-align:right;">${fmt(it.price*it.qty)}</td>
-                </tr>`).join('')}
+              ${inv.items.map(it=>`<tr><td style="padding:5px 7px;">${it.name}</td><td style="padding:5px 7px;text-align:center;">${it.qty} ${it.unit}</td><td style="padding:5px 7px;text-align:right;">${fmt(it.price)}</td><td style="padding:5px 7px;text-align:right;">${fmt(it.price*it.qty)}</td></tr>`).join('')}
             </tbody>
           </table>
-          <div style="border-top:1px solid #e2e8f0;padding-top:10px;margin-top:6px;">
-            <div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Subtotal</span><span>${fmt(inv.sub)}</span></div>
-            ${inv.disc>0?`<div style="display:flex;justify-content:space-between;margin-bottom:4px;"><span>Discount</span><span>−${fmt(inv.disc)}</span></div>`:''}
-            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800;border-top:2px solid #000;padding-top:8px;margin-top:4px;">
-              <span>TOTAL</span><span>${fmt(inv.total)}</span>
-            </div>
-            <div style="display:flex;justify-content:space-between;margin-top:5px;font-size:12px;"><span>Paid</span><span>${fmt(inv.paid)}</span></div>
-            ${inv.balance>0?`<div style="display:flex;justify-content:space-between;font-size:12px;color:#dc2626;font-weight:600;"><span>Balance Due</span><span>${fmt(inv.balance)}</span></div>`:''}
+          <div style="border-top:1px solid #e2e8f0;padding-top:9px;margin-top:5px;font-size:12px;">
+            <div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span>Subtotal</span><span>${fmt(inv.sub)}</span></div>
+            ${inv.disc>0?`<div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span>Discount</span><span>−${fmt(inv.disc)}</span></div>`:''}
+            <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800;border-top:2px solid #000;padding-top:7px;margin-top:4px;"><span>TOTAL</span><span>${fmt(inv.total)}</span></div>
+            <div style="display:flex;justify-content:space-between;margin-top:4px;"><span>Paid</span><span>${fmt(inv.paid)}</span></div>
+            ${inv.balance>0?`<div style="display:flex;justify-content:space-between;color:#dc2626;font-weight:600;"><span>Balance Due</span><span>${fmt(inv.balance)}</span></div>`:''}
             <div style="font-size:11px;color:#64748b;margin-top:3px;">Payment: ${inv.meth}</div>
           </div>
-          <div style="text-align:center;margin-top:14px;font-size:11px;color:#64748b;">— Thank you for your business! —</div>
+          <div style="text-align:center;margin-top:12px;font-size:11px;color:#64748b;">— Thank you for your business! —</div>
         </div>
       </div>
-      <div class="mf no-print">
+      <div class="mf">
         <button class="btn btn-ghost" onclick="waShare('${inv.id}')">📱 WhatsApp</button>
         <button class="btn btn-ghost" onclick="printInv()">🖨️ Print</button>
         <button class="btn btn-primary" onclick="closeModal();go('pos')">New Sale →</button>
@@ -762,37 +626,27 @@ function showInvModal(inv) {
   </div>`);
 }
 
-function printInv() {
-  const html = document.getElementById('inv-area').innerHTML;
-  const w = window.open('','','width=440,height=700');
-  w.document.write(`<html><head><title>Invoice</title><style>*{box-sizing:border-box;}body{font-family:sans-serif;padding:20px;}table{width:100%;border-collapse:collapse;}th,td{padding:5px 8px;}</style></head><body>${html}</body></html>`);
-  w.document.close(); w.print();
-}
-
 function waShare(invId) {
-  const inv = db.get(K.invoices).find(i=>i.id===invId);
-  if(!inv) return;
-  let m = `*${cfg().shopName}*\nInvoice: ${inv.no}\nDate: ${new Date(inv.at).toLocaleString()}\n\n*Items:*\n`;
+  const inv=db.get(K.invoices).find(i=>i.id===invId); if(!inv)return;
+  let m=`*${cfg().shopName}*\nInvoice: ${inv.no}\nDate: ${new Date(inv.at).toLocaleString()}\n\n*Items:*\n`;
   inv.items.forEach(it=>{ m+=`• ${it.name} × ${it.qty} ${it.unit} = ${fmt(it.price*it.qty)}\n`; });
   m+=`\n*Total: ${fmt(inv.total)}*`;
-  if(inv.balance>0) m+=`\nBalance Due: ${fmt(inv.balance)}`;
+  if (inv.balance>0) m+=`\nBalance Due: ${fmt(inv.balance)}`;
   m+='\n\nThank you! 🙏';
-  const ph = inv.custPhone ? inv.custPhone.replace(/\D/g,'') : '';
+  const ph=inv.custPhone?inv.custPhone.replace(/\D/g,''):'';
   window.open(`https://wa.me/${ph?'94'+ph.slice(-9):''}?text=${encodeURIComponent(m)}`,'_blank');
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // PRODUCTS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageProducts() {
-  const prods = db.get(K.products);
+  const prods=db.get(K.products);
   return `
   <div class="ph">
-    <div class="ph-title">Products <span style="font-size:14px;font-weight:400;color:var(--muted);">(${prods.length})</span></div>
+    <div class="ph-title">Products <span style="font-size:13px;font-weight:400;color:var(--muted);">(${prods.length})</span></div>
     <div class="ph-actions">
-      <div class="search-wrap">
-        <input type="text" id="prod-q" placeholder="Search name / SKU..." style="padding:8px 12px 8px 34px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;width:220px;" oninput="filterProdTable()">
-      </div>
+      <input type="text" id="prod-q" placeholder="Search name / SKU / category…" style="padding:7px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;width:230px;" oninput="filterProdTable()">
       <button class="btn btn-primary" onclick="prodModal()">+ Add Product</button>
     </div>
   </div>
@@ -805,189 +659,127 @@ function pageProducts() {
 }
 
 function renderProdRows(prods) {
-  if(!prods.length) return `<tr><td colspan="8"><div class="empty"><div class="empty-icon">📦</div><p>No products yet. Click "Add Product" to begin.</p></div></td></tr>`;
+  if (!prods.length) return `<tr><td colspan="8"><div class="empty"><div class="ei">📦</div><p>No products yet. Click "Add Product" to begin.</p></div></td></tr>`;
   return prods.map(p=>{
-    const sc = p.stock<=0?'badge-red':p.stock<=(p.minStock||5)?'badge-amber':'badge-green';
+    const sc=p.stock<=0?'bg-red':p.stock<=(p.minStock||5)?'bg-amber':'bg-green';
     return `<tr>
-      <td><strong>${p.name}</strong></td>
-      <td>${p.cat||'—'}</td>
-      <td style="font-size:11px;color:var(--muted);">${p.sku||'—'}</td>
-      <td>${p.unit||'pcs'}</td>
-      <td>${fmt(p.sell)}</td>
-      <td><span class="badge ${sc}">${p.stock||0}</span></td>
-      <td><span class="badge ${p.type==='import'?'badge-purple':'badge-blue'}">${p.type||'local'}</span></td>
-      <td style="display:flex;gap:6px;">
+      <td><strong>${p.name}</strong></td><td>${p.cat||'—'}</td>
+      <td style="font-size:11px;color:var(--muted);">${p.sku||'—'}</td><td>${p.unit||'pcs'}</td>
+      <td>${fmt(p.sell)}</td><td><span class="badge ${sc}">${p.stock||0}</span></td>
+      <td><span class="badge ${p.type==='import'?'bg-purple':'bg-blue'}">${p.type||'local'}</span></td>
+      <td style="display:flex;gap:5px;">
         <button class="btn btn-sm btn-ghost" onclick="prodModal('${p.id}')">Edit</button>
-        <button class="btn btn-sm btn-danger-ghost" onclick="delProd('${p.id}')">Del</button>
+        <button class="btn btn-sm btn-dg" onclick="delProd('${p.id}')">Del</button>
       </td>
     </tr>`;
   }).join('');
 }
 
 function filterProdTable() {
-  const q = document.getElementById('prod-q').value.toLowerCase();
-  const prods = db.get(K.products).filter(p=>p.name.toLowerCase().includes(q)||(p.sku||'').toLowerCase().includes(q)||(p.cat||'').toLowerCase().includes(q));
-  document.getElementById('prod-tbl').innerHTML = renderProdRows(prods);
+  const q=document.getElementById('prod-q').value.toLowerCase();
+  const prods=db.get(K.products).filter(p=>p.name.toLowerCase().includes(q)||(p.sku||'').toLowerCase().includes(q)||(p.cat||'').toLowerCase().includes(q));
+  document.getElementById('prod-tbl').innerHTML=renderProdRows(prods);
 }
 
 function prodModal(id=null) {
-  const prods = db.get(K.products);
-  const p = id ? prods.find(x=>x.id===id) : null;
-  const cats = [...new Set(prods.map(x=>x.cat).filter(Boolean))];
+  const prods=db.get(K.products); const p=id?prods.find(x=>x.id===id):null;
+  const cats=[...new Set(prods.map(x=>x.cat).filter(Boolean))];
   modal(`
-  <div class="overlay">
-    <div class="modal modal-lg">
-      <div class="mh"><h3>${p?'Edit Product':'Add Product'}</h3><button class="mclose" onclick="closeModal()">×</button></div>
-      <div class="mb">
-        <div class="grid2">
-          <div class="fg"><label>Product Name *</label><input id="pn" value="${p?.name||''}" placeholder="e.g. A4 Paper Ream 80gsm"></div>
-          <div class="fg"><label>Category</label><input id="pc" value="${p?.cat||''}" list="cat-dl" placeholder="e.g. Paper, Pens, Files"><datalist id="cat-dl">${cats.map(c=>`<option value="${c}">`).join('')}</datalist></div>
-        </div>
-        <div class="grid2">
-          <div class="fg"><label>SKU / Code</label><input id="psk" value="${p?.sku||''}" placeholder="e.g. A4-80GSM"></div>
-          <div class="fg"><label>Unit</label>
-            <select id="pu">${['piece','box','dozen','ream','packet','roll','bundle','kg','litre','carton'].map(u=>`<option ${p?.unit===u?'selected':''} value="${u}">${u}</option>`).join('')}</select>
-          </div>
-        </div>
-        <div class="grid3">
-          <div class="fg"><label>Cost Price (Rs.)</label><input type="number" id="pcp" value="${p?.cost||''}" placeholder="0.00"></div>
-          <div class="fg"><label>Selling Price (Rs.) *</label><input type="number" id="psp" value="${p?.sell||''}" placeholder="0.00"></div>
-          <div class="fg"><label>Wholesale Price (Rs.)</label><input type="number" id="pwp" value="${p?.wsp||''}" placeholder="0.00"></div>
-        </div>
-        <div class="grid2">
-          <div class="fg"><label>Current Stock</label><input type="number" id="pst" value="${p?.stock||0}" min="0"></div>
-          <div class="fg"><label>Min Stock (Alert Level)</label><input type="number" id="pms" value="${p?.minStock||5}" min="0"></div>
-        </div>
-        <div class="fg"><label>Stock Type</label>
-          <select id="ptp">
-            <option value="local" ${p?.type!=='import'?'selected':''}>🏪 Local Purchase</option>
-            <option value="import" ${p?.type==='import'?'selected':''}>🌍 Import</option>
-          </select>
-        </div>
+  <div class="overlay"><div class="modal modal-lg">
+    <div class="mh"><h3>${p?'Edit Product':'Add Product'}</h3><button class="mclose" onclick="closeModal()">×</button></div>
+    <div class="mb">
+      <div class="grid2">
+        <div class="fg"><label>Product Name *</label><input id="pn" value="${p?.name||''}" placeholder="e.g. A4 Paper Ream 80gsm"></div>
+        <div class="fg"><label>Category</label><input id="pc" value="${p?.cat||''}" list="cat-dl" placeholder="e.g. Paper, Pens, Files"><datalist id="cat-dl">${cats.map(c=>`<option value="${c}">`).join('')}</datalist></div>
       </div>
-      <div class="mf">
-        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveProd('${id||''}')">${p?'Save Changes':'Add Product'}</button>
+      <div class="grid2">
+        <div class="fg"><label>SKU / Code</label><input id="psk" value="${p?.sku||''}" placeholder="e.g. A4-80GSM"></div>
+        <div class="fg"><label>Unit</label><select id="pu">${['piece','box','dozen','ream','packet','roll','bundle','kg','litre','carton'].map(u=>`<option ${p?.unit===u?'selected':''} value="${u}">${u}</option>`).join('')}</select></div>
       </div>
+      <div class="grid3">
+        <div class="fg"><label>Cost Price (Rs.)</label><input type="number" id="pcp" value="${p?.cost||''}" placeholder="0.00"></div>
+        <div class="fg"><label>Selling Price *</label><input type="number" id="psp" value="${p?.sell||''}" placeholder="0.00"></div>
+        <div class="fg"><label>Wholesale Price</label><input type="number" id="pwp" value="${p?.wsp||''}" placeholder="0.00"></div>
+      </div>
+      <div class="grid2">
+        <div class="fg"><label>Current Stock</label><input type="number" id="pst" value="${p?.stock||0}" min="0"></div>
+        <div class="fg"><label>Min Stock (Alert)</label><input type="number" id="pms" value="${p?.minStock||5}" min="0"></div>
+      </div>
+      <div class="fg"><label>Stock Type</label><select id="ptp"><option value="local" ${p?.type!=='import'?'selected':''}>🏪 Local Purchase</option><option value="import" ${p?.type==='import'?'selected':''}>🌍 Import</option></select></div>
     </div>
-  </div>`);
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProd('${id||''}')">${p?'Save Changes':'Add Product'}</button>
+    </div>
+  </div></div>`);
 }
 
 function saveProd(id) {
-  const name = document.getElementById('pn').value.trim();
-  if(!name) { toast('⚠️ Product name required!','warn'); return; }
-  const prods = db.get(K.products);
-  const data = {
-    name, cat: document.getElementById('pc').value.trim(),
-    sku: document.getElementById('psk').value.trim(),
-    unit: document.getElementById('pu').value,
-    cost: parseFloat(document.getElementById('pcp').value)||0,
-    sell: parseFloat(document.getElementById('psp').value)||0,
-    wsp: parseFloat(document.getElementById('pwp').value)||0,
-    stock: parseInt(document.getElementById('pst').value)||0,
-    minStock: parseInt(document.getElementById('pms').value)||5,
-    type: document.getElementById('ptp').value
-  };
-  if(id) { const i=prods.findIndex(p=>p.id===id); if(i>=0) prods[i]={...prods[i],...data}; }
+  const name=document.getElementById('pn').value.trim();
+  if (!name){ toast('⚠️ Name required!','warn'); return; }
+  const prods=db.get(K.products);
+  const data={ name, cat:document.getElementById('pc').value.trim(), sku:document.getElementById('psk').value.trim(), unit:document.getElementById('pu').value, cost:parseFloat(document.getElementById('pcp').value)||0, sell:parseFloat(document.getElementById('psp').value)||0, wsp:parseFloat(document.getElementById('pwp').value)||0, stock:parseInt(document.getElementById('pst').value)||0, minStock:parseInt(document.getElementById('pms').value)||5, type:document.getElementById('ptp').value };
+  if (id){ const i=prods.findIndex(p=>p.id===id); if(i>=0) prods[i]={...prods[i],...data}; }
   else prods.push({id:uid(),...data,at:new Date().toISOString()});
-  db.set(K.products, prods);
-  closeModal(); go('products');
+  db.set(K.products,prods); closeModal(); go('products');
   toast(id?'✅ Product updated!':'✅ Product added!');
 }
+function delProd(id){ if(!confirm('Delete this product?'))return; db.set(K.products,db.get(K.products).filter(p=>p.id!==id)); go('products'); toast('🗑️ Deleted'); }
 
-function delProd(id) {
-  if(!confirm('Delete this product?')) return;
-  db.set(K.products, db.get(K.products).filter(p=>p.id!==id));
-  go('products'); toast('🗑️ Product deleted');
-}
-
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // STOCK IN
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageStock() {
-  const prods = db.get(K.products);
-  const entries = db.get(K.stock);
+  const prods=db.get(K.products), entries=db.get(K.stock);
   return `
   <div class="ph"><div class="ph-title">Stock In</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;">
     <div class="card">
       <div class="card-title">Add Stock Entry</div>
-      <div class="fg"><label>Product *</label>
-        <select id="st-prod">
-          <option value="">Select product...</option>
-          ${prods.map(p=>`<option value="${p.id}">${p.name} (Current: ${p.stock||0} ${p.unit||''})</option>`).join('')}
-        </select>
-      </div>
+      <div class="fg"><label>Product *</label><select id="st-prod"><option value="">Select product...</option>${prods.map(p=>`<option value="${p.id}">${p.name} (Current: ${p.stock||0} ${p.unit||''})</option>`).join('')}</select></div>
       <div class="grid2">
         <div class="fg"><label>Quantity *</label><input type="number" id="st-qty" placeholder="0" min="1"></div>
         <div class="fg"><label>Cost Price (Rs.)</label><input type="number" id="st-cost" placeholder="0.00"></div>
       </div>
       <div class="grid2">
         <div class="fg"><label>Supplier Name</label><input id="st-sup" placeholder="Supplier name"></div>
-        <div class="fg"><label>Stock Type</label>
-          <select id="st-type">
-            <option value="local">🏪 Local Purchase</option>
-            <option value="import">🌍 Import</option>
-          </select>
-        </div>
+        <div class="fg"><label>Stock Type</label><select id="st-type"><option value="local">🏪 Local</option><option value="import">🌍 Import</option></select></div>
       </div>
-      <div class="fg"><label>Note (Optional)</label><input id="st-note" placeholder="Invoice no, reference, etc."></div>
+      <div class="fg"><label>Note (Optional)</label><input id="st-note" placeholder="Invoice no, reference..."></div>
       <button class="btn btn-primary" onclick="addStock()" style="width:100%;justify-content:center;padding:10px;">📦 Add to Stock</button>
     </div>
     <div class="card">
       <div class="card-title">Recent Entries</div>
-      ${entries.length===0 ? `<div class="empty"><div class="empty-icon">📋</div><p>No entries yet</p></div>` :
-        `<div style="max-height:380px;overflow-y:auto;">
-          ${entries.slice(-15).reverse().map(e=>{
-            const p=prods.find(x=>x.id===e.pid);
-            return `<div style="padding:10px 0;border-bottom:1px solid #f1f5f9;">
-              <div style="display:flex;justify-content:space-between;align-items:center;">
-                <strong style="font-size:13px;">${p?.name||'Unknown'}</strong>
-                <span style="color:var(--success);font-weight:600;font-size:13px;">+${e.qty} ${p?.unit||''}</span>
-              </div>
-              <div style="font-size:11px;color:var(--muted);margin-top:2px;">
-                ${e.sup?e.sup+' · ':''}
-                ${e.type==='import'?'🌍 Import':'🏪 Local'} · 
-                ${new Date(e.at).toLocaleDateString()}
-                ${e.cost>0?' · Cost: '+fmt(e.cost):''}
-              </div>
-            </div>`;
-          }).join('')}
-        </div>`}
+      ${entries.length===0?`<div class="empty"><div class="ei">📋</div><p>No entries yet</p></div>`:
+        `<div style="max-height:370px;overflow-y:auto;">${entries.slice(-15).reverse().map(e=>{const p=prods.find(x=>x.id===e.pid); return `<div style="padding:9px 0;border-bottom:1px solid #f1f5f9;"><div style="display:flex;justify-content:space-between;"><strong style="font-size:13px;">${p?.name||'Unknown'}</strong><span style="color:var(--success);font-weight:600;font-size:13px;">+${e.qty} ${p?.unit||''}</span></div><div style="font-size:11px;color:var(--muted);margin-top:1px;">${e.sup?e.sup+' · ':''}${e.type==='import'?'🌍 Import':'🏪 Local'} · ${new Date(e.at).toLocaleDateString()}${e.cost>0?' · Cost: '+fmt(e.cost):''}</div></div>`;}).join('')}</div>`}
     </div>
   </div>`;
 }
 
 function addStock() {
-  const pid = document.getElementById('st-prod').value;
-  const qty = parseInt(document.getElementById('st-qty').value);
-  if(!pid) { toast('⚠️ Select a product!','warn'); return; }
-  if(!qty||qty<=0) { toast('⚠️ Enter valid quantity!','warn'); return; }
-  const prods = db.get(K.products);
-  const stocks = db.get(K.stock);
-  const p = prods.find(x=>x.id===pid); if(!p) return;
-  p.stock = (p.stock||0)+qty;
-  stocks.push({ id:uid(), pid, qty, cost:parseFloat(document.getElementById('st-cost').value)||0, sup:document.getElementById('st-sup').value.trim(), type:document.getElementById('st-type').value, note:document.getElementById('st-note').value.trim(), at:new Date().toISOString() });
-  db.set(K.products, prods); db.set(K.stock, stocks);
-  toast(`✅ +${qty} ${p.unit||''} added to "${p.name}"`);
-  go('stock');
+  const pid=document.getElementById('st-prod').value, qty=parseInt(document.getElementById('st-qty').value);
+  if (!pid){ toast('⚠️ Select a product!','warn'); return; }
+  if (!qty||qty<=0){ toast('⚠️ Enter valid quantity!','warn'); return; }
+  const prods=db.get(K.products), stocks=db.get(K.stock);
+  const p=prods.find(x=>x.id===pid); if(!p)return;
+  p.stock=(p.stock||0)+qty;
+  stocks.push({id:uid(),pid,qty,cost:parseFloat(document.getElementById('st-cost').value)||0,sup:document.getElementById('st-sup').value.trim(),type:document.getElementById('st-type').value,note:document.getElementById('st-note').value.trim(),at:new Date().toISOString()});
+  db.set(K.products,prods); db.set(K.stock,stocks);
+  toast(`✅ +${qty} ${p.unit||''} added to "${p.name}"`); go('stock');
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // INVOICES
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageInvoices() {
-  const invs = db.get(K.invoices);
+  const invs=db.get(K.invoices);
   return `
   <div class="ph">
-    <div class="ph-title">Invoices <span style="font-size:14px;font-weight:400;color:var(--muted);">(${invs.length})</span></div>
+    <div class="ph-title">Invoices <span style="font-size:13px;font-weight:400;color:var(--muted);">(${invs.length})</span></div>
     <div class="ph-actions">
-      <input type="date" id="inv-date" style="padding:7px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;" onchange="filterInvs()">
-      <select id="inv-status" style="padding:7px 11px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;" onchange="filterInvs()">
-        <option value="">All Status</option>
-        <option value="paid">Paid</option>
-        <option value="partial">Partial</option>
-        <option value="credit">Credit</option>
+      <input type="date" id="inv-date" style="padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;" onchange="filterInvs()">
+      <select id="inv-status" style="padding:7px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;font-family:inherit;" onchange="filterInvs()">
+        <option value="">All Status</option><option value="paid">Paid</option><option value="partial">Partial</option><option value="credit">Credit</option>
       </select>
     </div>
   </div>
@@ -1000,178 +792,120 @@ function pageInvoices() {
 }
 
 function renderInvRows(invs) {
-  if(!invs.length) return `<tr><td colspan="9"><div class="empty"><div class="empty-icon">🧾</div><p>No invoices yet</p></div></td></tr>`;
+  if (!invs.length) return `<tr><td colspan="9"><div class="empty"><div class="ei">🧾</div><p>No invoices yet</p></div></td></tr>`;
   return invs.slice().reverse().map(i=>`
     <tr>
-      <td><strong>${i.no}</strong></td>
-      <td>${i.custName}</td>
+      <td><strong>${i.no}</strong></td><td>${i.custName}</td>
       <td style="color:var(--muted);">${i.items.length} item${i.items.length!==1?'s':''}</td>
-      <td><strong>${fmt(i.total)}</strong></td>
-      <td>${fmt(i.paid||0)}</td>
+      <td><strong>${fmt(i.total)}</strong></td><td>${fmt(i.paid||0)}</td>
       <td style="color:${(i.balance||0)>0?'var(--danger)':'var(--success)'};">${fmt(i.balance||0)}</td>
-      <td><span class="badge ${i.status==='paid'?'badge-green':i.status==='partial'?'badge-amber':'badge-red'}">${i.status}</span></td>
+      <td><span class="badge ${i.status==='paid'?'bg-green':i.status==='partial'?'bg-amber':'bg-red'}">${i.status}</span></td>
       <td style="font-size:12px;color:var(--muted);">${new Date(i.at).toLocaleDateString()}</td>
       <td><button class="btn btn-sm btn-ghost" onclick="viewInv('${i.id}')">View</button></td>
     </tr>`).join('');
 }
 
 function filterInvs() {
-  let invs = db.get(K.invoices);
-  const d = document.getElementById('inv-date').value;
-  const s = document.getElementById('inv-status').value;
-  if(d) invs = invs.filter(i=>i.at.startsWith(d));
-  if(s) invs = invs.filter(i=>i.status===s);
-  document.getElementById('inv-tbl').innerHTML = renderInvRows(invs);
+  let invs=db.get(K.invoices);
+  const d=document.getElementById('inv-date').value, s=document.getElementById('inv-status').value;
+  if(d) invs=invs.filter(i=>i.at.startsWith(d));
+  if(s) invs=invs.filter(i=>i.status===s);
+  document.getElementById('inv-tbl').innerHTML=renderInvRows(invs);
 }
+function viewInv(id){ const inv=db.get(K.invoices).find(i=>i.id===id); if(inv) showInvModal(inv); }
 
-function viewInv(id) {
-  const inv = db.get(K.invoices).find(i=>i.id===id);
-  if(inv) showInvModal(inv);
-}
-
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // CUSTOMERS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageCustomers() {
-  const custs = db.get(K.customers);
+  const custs=db.get(K.customers);
   return `
   <div class="ph">
-    <div class="ph-title">Customers <span style="font-size:14px;font-weight:400;color:var(--muted);">(${custs.length})</span></div>
+    <div class="ph-title">Customers <span style="font-size:13px;font-weight:400;color:var(--muted);">(${custs.length})</span></div>
     <button class="btn btn-primary" onclick="custModal()">+ Add Customer</button>
   </div>
   <div class="tbl-wrap">
     <table>
       <thead><tr><th>Name</th><th>Phone</th><th>Address</th><th>Credit Limit</th><th>Outstanding</th><th>Actions</th></tr></thead>
       <tbody>
-        ${custs.length===0 ? `<tr><td colspan="6"><div class="empty"><div class="empty-icon">👥</div><p>No customers yet</p></div></td></tr>` :
-          custs.map(c=>`
-            <tr>
-              <td><strong>${c.name}</strong></td>
-              <td>${c.phone||'—'}</td>
-              <td style="font-size:12px;">${c.address||'—'}</td>
-              <td>${fmt(c.limit||0)}</td>
-              <td style="color:${(c.credit||0)>0?'var(--danger)':'inherit'};font-weight:${(c.credit||0)>0?'600':'400'};">${fmt(c.credit||0)}</td>
-              <td style="display:flex;gap:6px;">
-                <button class="btn btn-sm btn-ghost" onclick="custModal('${c.id}')">Edit</button>
-                <button class="btn btn-sm btn-danger-ghost" onclick="delCust('${c.id}')">Del</button>
-              </td>
-            </tr>`).join('')}
+        ${custs.length===0?`<tr><td colspan="6"><div class="empty"><div class="ei">👥</div><p>No customers yet</p></div></td></tr>`:
+          custs.map(c=>`<tr><td><strong>${c.name}</strong></td><td>${c.phone||'—'}</td><td style="font-size:12px;">${c.address||'—'}</td><td>${fmt(c.limit||0)}</td><td style="color:${(c.credit||0)>0?'var(--danger)':'inherit'};font-weight:${(c.credit||0)>0?600:400};">${fmt(c.credit||0)}</td><td style="display:flex;gap:5px;"><button class="btn btn-sm btn-ghost" onclick="custModal('${c.id}')">Edit</button><button class="btn btn-sm btn-dg" onclick="delCust('${c.id}')">Del</button></td></tr>`).join('')}
       </tbody>
     </table>
   </div>`;
 }
 
 function custModal(id=null) {
-  const custs = db.get(K.customers);
-  const c = id ? custs.find(x=>x.id===id) : null;
-  modal(`
-  <div class="overlay">
-    <div class="modal modal-sm">
-      <div class="mh"><h3>${c?'Edit Customer':'Add Customer'}</h3><button class="mclose" onclick="closeModal()">×</button></div>
-      <div class="mb">
-        <div class="grid2">
-          <div class="fg"><label>Name *</label><input id="cn" value="${c?.name||''}" placeholder="Customer name"></div>
-          <div class="fg"><label>Phone</label><input id="cph" value="${c?.phone||''}" placeholder="07X XXX XXXX"></div>
-        </div>
-        <div class="fg"><label>Address</label><textarea id="ca" rows="2">${c?.address||''}</textarea></div>
-        <div class="grid2">
-          <div class="fg"><label>Credit Limit (Rs.)</label><input type="number" id="cl" value="${c?.limit||0}" min="0"></div>
-          <div class="fg"><label>Outstanding (Rs.)</label><input type="number" id="co" value="${c?.credit||0}" min="0"></div>
-        </div>
+  const custs=db.get(K.customers); const c=id?custs.find(x=>x.id===id):null;
+  modal(`<div class="overlay"><div class="modal modal-sm">
+    <div class="mh"><h3>${c?'Edit Customer':'Add Customer'}</h3><button class="mclose" onclick="closeModal()">×</button></div>
+    <div class="mb">
+      <div class="grid2">
+        <div class="fg"><label>Name *</label><input id="cn" value="${c?.name||''}" placeholder="Customer name"></div>
+        <div class="fg"><label>Phone</label><input id="cph" value="${c?.phone||''}" placeholder="07X XXX XXXX"></div>
       </div>
-      <div class="mf">
-        <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
-        <button class="btn btn-primary" onclick="saveCust('${id||''}')">${c?'Save Changes':'Add Customer'}</button>
+      <div class="fg"><label>Address</label><textarea id="ca" rows="2">${c?.address||''}</textarea></div>
+      <div class="grid2">
+        <div class="fg"><label>Credit Limit (Rs.)</label><input type="number" id="cl" value="${c?.limit||0}" min="0"></div>
+        <div class="fg"><label>Outstanding (Rs.)</label><input type="number" id="co" value="${c?.credit||0}" min="0"></div>
       </div>
     </div>
-  </div>`);
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveCust('${id||''}')">${c?'Save Changes':'Add Customer'}</button>
+    </div>
+  </div></div>`);
 }
 
 function saveCust(id) {
-  const name = document.getElementById('cn').value.trim();
-  if(!name) { toast('⚠️ Name required!','warn'); return; }
-  const custs = db.get(K.customers);
-  const data = { name, phone:document.getElementById('cph').value.trim(), address:document.getElementById('ca').value.trim(), limit:parseFloat(document.getElementById('cl').value)||0, credit:parseFloat(document.getElementById('co').value)||0 };
-  if(id) { const i=custs.findIndex(c=>c.id===id); if(i>=0) custs[i]={...custs[i],...data}; }
+  const name=document.getElementById('cn').value.trim();
+  if(!name){toast('⚠️ Name required!','warn');return;}
+  const custs=db.get(K.customers);
+  const data={name,phone:document.getElementById('cph').value.trim(),address:document.getElementById('ca').value.trim(),limit:parseFloat(document.getElementById('cl').value)||0,credit:parseFloat(document.getElementById('co').value)||0};
+  if(id){const i=custs.findIndex(c=>c.id===id);if(i>=0)custs[i]={...custs[i],...data};}
   else custs.push({id:uid(),...data,at:new Date().toISOString()});
-  db.set(K.customers,custs); closeModal(); go('customers');
+  db.set(K.customers,custs);closeModal();go('customers');
   toast(id?'✅ Customer updated!':'✅ Customer added!');
 }
+function delCust(id){if(!confirm('Delete?'))return;db.set(K.customers,db.get(K.customers).filter(c=>c.id!==id));go('customers');toast('🗑️ Deleted');}
 
-function delCust(id) {
-  if(!confirm('Delete this customer?')) return;
-  db.set(K.customers, db.get(K.customers).filter(c=>c.id!==id));
-  go('customers'); toast('🗑️ Customer deleted');
-}
-
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // REPORTS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageReports() {
-  const invs = db.get(K.invoices), prods = db.get(K.products);
-  const monthly = {};
-  invs.forEach(i => {
-    const m = new Date(i.at).toLocaleDateString('en-US',{year:'numeric',month:'short'});
-    if(!monthly[m]) monthly[m]={rev:0,count:0};
-    monthly[m].rev+=i.total; monthly[m].count++;
-  });
-  const prodSales = {};
-  invs.forEach(i=>i.items.forEach(it=>{
-    if(!prodSales[it.name]) prodSales[it.name]={qty:0,rev:0};
-    prodSales[it.name].qty+=it.qty; prodSales[it.name].rev+=it.price*it.qty;
-  }));
-  const top5 = Object.entries(prodSales).sort((a,b)=>b[1].rev-a[1].rev).slice(0,8);
-  const low = prods.filter(p=>(p.stock||0)<=(p.minStock||5));
-
+  const invs=db.get(K.invoices),prods=db.get(K.products);
+  const monthly={};
+  invs.forEach(i=>{const m=new Date(i.at).toLocaleDateString('en-US',{year:'numeric',month:'short'});if(!monthly[m])monthly[m]={rev:0,count:0};monthly[m].rev+=i.total;monthly[m].count++;});
+  const ps={};
+  invs.forEach(i=>i.items.forEach(it=>{if(!ps[it.name])ps[it.name]={qty:0,rev:0};ps[it.name].qty+=it.qty;ps[it.name].rev+=it.price*it.qty;}));
+  const top=Object.entries(ps).sort((a,b)=>b[1].rev-a[1].rev).slice(0,8);
+  const low=prods.filter(p=>(p.stock||0)<=(p.minStock||5));
   return `
   <div class="ph"><div class="ph-title">Reports</div></div>
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;">
-    <div class="card">
-      <div class="card-title">📅 Monthly Sales</div>
-      ${Object.keys(monthly).length===0 ? `<div class="empty"><div class="empty-icon">📊</div><p>No data</p></div>` :
-        `<table>
-          <thead><tr><th>Month</th><th>Revenue</th><th>Bills</th></tr></thead>
-          <tbody>
-            ${Object.entries(monthly).reverse().map(([m,d])=>`
-              <tr><td>${m}</td><td>${fmt(d.rev)}</td><td>${d.count}</td></tr>`).join('')}
-          </tbody>
-        </table>`}
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:13px;margin-bottom:13px;">
+    <div class="card"><div class="card-title">📅 Monthly Sales</div>
+      ${Object.keys(monthly).length===0?`<div class="empty"><div class="ei">📊</div><p>No data</p></div>`:
+        `<table><thead><tr><th>Month</th><th>Revenue</th><th>Bills</th></tr></thead><tbody>${Object.entries(monthly).reverse().map(([m,d])=>`<tr><td>${m}</td><td>${fmt(d.rev)}</td><td>${d.count}</td></tr>`).join('')}</tbody></table>`}
     </div>
-    <div class="card">
-      <div class="card-title">🏆 Top Products by Revenue</div>
-      ${top5.length===0 ? `<div class="empty"><div class="empty-icon">📦</div><p>No sales yet</p></div>` :
-        `<table>
-          <thead><tr><th>Product</th><th>Qty Sold</th><th>Revenue</th></tr></thead>
-          <tbody>${top5.map(([n,d])=>`<tr><td>${n}</td><td>${d.qty}</td><td>${fmt(d.rev)}</td></tr>`).join('')}</tbody>
-        </table>`}
+    <div class="card"><div class="card-title">🏆 Top Products</div>
+      ${top.length===0?`<div class="empty"><div class="ei">📦</div><p>No sales yet</p></div>`:
+        `<table><thead><tr><th>Product</th><th>Qty</th><th>Revenue</th></tr></thead><tbody>${top.map(([n,d])=>`<tr><td>${n}</td><td>${d.qty}</td><td>${fmt(d.rev)}</td></tr>`).join('')}</tbody></table>`}
     </div>
   </div>
-  <div class="card">
-    <div class="card-title">⚠️ Low / Out of Stock Products</div>
-    ${low.length===0 ? `<div class="empty"><div class="empty-icon">✅</div><p>All products are well-stocked</p></div>` :
-      `<table>
-        <thead><tr><th>Product</th><th>Category</th><th>Current Stock</th><th>Min Stock</th><th>Status</th></tr></thead>
-        <tbody>${low.map(p=>`
-          <tr>
-            <td><strong>${p.name}</strong></td>
-            <td>${p.cat||'—'}</td>
-            <td>${p.stock||0}</td>
-            <td>${p.minStock||5}</td>
-            <td><span class="badge ${(p.stock||0)<=0?'badge-red':'badge-amber'}">${(p.stock||0)<=0?'Out of Stock':'Low Stock'}</span></td>
-          </tr>`).join('')}
-        </tbody>
-      </table>`}
+  <div class="card"><div class="card-title">⚠️ Low / Out of Stock</div>
+    ${low.length===0?`<div class="empty"><div class="ei">✅</div><p>All products well-stocked</p></div>`:
+      `<table><thead><tr><th>Product</th><th>Category</th><th>Stock</th><th>Min Stock</th><th>Status</th></tr></thead><tbody>${low.map(p=>`<tr><td><strong>${p.name}</strong></td><td>${p.cat||'—'}</td><td>${p.stock||0}</td><td>${p.minStock||5}</td><td><span class="badge ${(p.stock||0)<=0?'bg-red':'bg-amber'}">${(p.stock||0)<=0?'Out of Stock':'Low Stock'}</span></td></tr>`).join('')}</tbody></table>`}
   </div>`;
 }
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // SETTINGS
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 function pageSettings() {
-  const s = cfg();
+  const s=cfg();
   return `
   <div class="ph"><div class="ph-title">Settings</div></div>
-  <div style="max-width:480px;display:flex;flex-direction:column;gap:14px;">
+  <div style="max-width:500px;display:flex;flex-direction:column;gap:13px;">
     <div class="card">
       <div class="card-title">🏪 Shop Information</div>
       <div class="fg"><label>Shop Name</label><input id="sn" value="${s.shopName}"></div>
@@ -1180,50 +914,75 @@ function pageSettings() {
       <div class="fg"><label>Tax Rate (%)</label><input type="number" id="stx" value="${s.taxRate}" min="0" max="100"></div>
       <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
     </div>
+
+    <div class="card">
+      <div class="card-title">🔥 Firebase Sync (Multi-device)</div>
+      <div class="fg">
+        <label>Firebase Database URL</label>
+        <input id="fb-url" value="${FB_URL}" placeholder="https://your-project-default-rtdb.firebaseio.com">
+      </div>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:10px;">
+        Paste your Firebase Realtime Database URL above. All 3 devices will sync automatically every 5 minutes. Use the 🔄 Sync button in the top bar to sync manually anytime.
+      </p>
+      <button class="btn btn-primary" onclick="saveFBUrl()">💾 Save Firebase URL</button>
+      <button class="btn btn-ghost" style="margin-left:8px;" onclick="testFB()">🔄 Test Connection</button>
+    </div>
+
     <div class="card">
       <div class="card-title">💾 Data Backup</div>
       <div style="display:flex;gap:8px;">
-        <button class="btn btn-ghost" onclick="exportData()">📤 Export Backup</button>
-        <button class="btn btn-ghost" onclick="document.getElementById('imp-file').click()">📥 Import Backup</button>
-        <input type="file" id="imp-file" accept=".json" style="display:none;" onchange="importData(event)">
+        <button class="btn btn-ghost" onclick="exportData()">📤 Export JSON</button>
+        <button class="btn btn-ghost" onclick="document.getElementById('imp-f').click()">📥 Import JSON</button>
+        <input type="file" id="imp-f" accept=".json" style="display:none;" onchange="importData(event)">
       </div>
-      <p style="font-size:12px;color:var(--muted);margin-top:10px;">Export your full data as a JSON file. Import to restore on another device.</p>
+      <p style="font-size:12px;color:var(--muted);margin-top:9px;">Export all data as a JSON backup file. Import on another device to restore.</p>
     </div>
   </div>`;
 }
 
 function saveSettings() {
-  db.setObj(K.settings, { shopName:document.getElementById('sn').value, address:document.getElementById('sa').value, phone:document.getElementById('sph').value, taxRate:parseFloat(document.getElementById('stx').value)||0 });
+  db.setObj(K.settings,{shopName:document.getElementById('sn').value,address:document.getElementById('sa').value,phone:document.getElementById('sph').value,taxRate:parseFloat(document.getElementById('stx').value)||0});
   toast('✅ Settings saved!');
 }
 
-function exportData() {
-  const data = {};
-  Object.values(K).forEach(k=>{ data[k]=JSON.parse(localStorage.getItem(k)||'[]'); });
-  const blob = new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `sna-backup-${new Date().toISOString().split('T')[0]}.json`;
-  a.click();
-  toast('📤 Backup exported!');
+function saveFBUrl() {
+  const url=document.getElementById('fb-url').value.trim();
+  FB_URL=url; localStorage.setItem('sna_fb_url',url);
+  if (url) { setSyncStatus('ing'); syncFromFB().then(ok=>{ if(ok) toast('✅ Firebase URL saved & connected!'); else toast('❌ Could not connect — check URL','err'); }); }
+  else { setSyncStatus('off'); toast('Firebase sync disabled'); }
 }
 
+async function testFB() {
+  if (!FB_URL){ toast('⚠️ Enter Firebase URL first','warn'); return; }
+  toast('Testing connection…');
+  const ok=await syncFromFB();
+  if (ok) toast('✅ Firebase connected! Data synced.'); else toast('❌ Connection failed — check URL & Firebase rules','err');
+}
+
+function exportData() {
+  const data={};
+  Object.values(K).forEach(k=>{data[k]=JSON.parse(localStorage.getItem(k)||'[]');});
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download=`sna-backup-${new Date().toISOString().split('T')[0]}.json`; a.click();
+  toast('📤 Backup exported!');
+}
 function importData(e) {
-  const f=e.target.files[0]; if(!f) return;
+  const f=e.target.files[0]; if(!f)return;
   const r=new FileReader();
-  r.onload=ev=>{ try { const d=JSON.parse(ev.target.result); Object.entries(d).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v))); toast('✅ Data imported!'); go(curPage); } catch { toast('❌ Invalid file!','err'); } };
+  r.onload=ev=>{ try{const d=JSON.parse(ev.target.result);Object.entries(d).forEach(([k,v])=>localStorage.setItem(k,JSON.stringify(v)));toast('✅ Data imported!');go(curPage);}catch{toast('❌ Invalid file!','err');} };
   r.readAsText(f);
 }
 
-// ═══════════════════════════════════════════════════
-// PAGE REGISTRY
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
+// PAGES REGISTRY
+// ═══════════════════════════════════════════════
 const PAGES = { dashboard:pageDashboard, pos:pagePOS, products:pageProducts, stock:pageStock, invoices:pageInvoices, customers:pageCustomers, reports:pageReports, settings:pageSettings };
-const AFTER  = { pos:()=>{ cart=[]; renderCart(); }, products:()=>{} };
+const AFTER  = { pos:()=>{cart=[];renderCart();} };
 
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 // BOOT
-// ═══════════════════════════════════════════════════
+// ═══════════════════════════════════════════════
 go('dashboard');
 </script>
 </body>
