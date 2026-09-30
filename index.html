@@ -341,13 +341,89 @@ function toast(msg, type='ok') {
 // PRINT — Direct to printer (no save-as default)
 // ═══════════════════════════════════════════════
 function printInv() {
-  const area = document.getElementById('inv-area');
-  if (!area) return;
-  document.getElementById('pf').innerHTML = `
-    <style>body{font-family:sans-serif;padding:20px;max-width:420px;}table{width:100%;border-collapse:collapse;}th,td{padding:5px 7px;}</style>
-    ${area.innerHTML}`;
-  window.print();
-  setTimeout(()=>{ document.getElementById('pf').innerHTML=''; }, 1000);
+  if (!currentInv) return;
+  const inv = currentInv;
+  const s = cfg();
+
+  const rows = inv.items.map(it => `
+    <tr>
+      <td>${it.name}</td>
+      <td style="text-align:center;">${it.qty} ${it.unit}</td>
+      <td style="text-align:right;">Rs. ${parseFloat(it.price).toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+      <td style="text-align:right;">Rs. ${(it.price*it.qty).toLocaleString('en-US',{minimumFractionDigits:2})}</td>
+    </tr>`).join('');
+
+  const html = `<!DOCTYPE html>
+<html>
+<head>
+<title>${inv.no}</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  @page { size: A4; margin: 20mm; }
+  body { font-family: Arial, sans-serif; font-size: 15px; color: #000; }
+  .shop-name { font-size: 26px; font-weight: 800; text-align: center; margin-bottom: 5px; }
+  .shop-sub  { font-size: 14px; text-align: center; color: #444; margin-bottom: 3px; }
+  .divider   { border: none; border-top: 1px solid #bbb; margin: 12px 0; }
+  .inv-meta  { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px; }
+  .customer  { font-size: 14px; margin-bottom: 8px; }
+  table      { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th { padding: 9px 10px; font-size: 13px; font-weight: 700; text-transform: uppercase;
+       letter-spacing: .4px; border-bottom: 2px solid #000; background: #f5f5f5; text-align: left; }
+  td { padding: 10px 10px; font-size: 15px; border-bottom: 1px solid #e5e5e5; }
+  .sum-row   { display: flex; justify-content: space-between; padding: 5px 0; font-size: 15px; }
+  .sum-total { display: flex; justify-content: space-between; padding: 11px 0 8px;
+               font-size: 22px; font-weight: 800; border-top: 3px solid #000; margin-top: 6px; }
+  .sum-bal   { display: flex; justify-content: space-between; font-size: 16px;
+               font-weight: 700; color: #dc2626; padding: 4px 0; }
+  .sum-meth  { font-size: 13px; color: #666; padding-top: 5px; }
+  .footer    { text-align: center; font-size: 14px; color: #666; margin-top: 24px; }
+</style>
+</head>
+<body>
+  <div class="shop-name">${s.shopName}</div>
+  ${s.address ? `<div class="shop-sub">${s.address}</div>` : ''}
+  ${s.phone   ? `<div class="shop-sub">📞 ${s.phone}</div>` : ''}
+  <hr class="divider">
+  <div class="inv-meta">
+    <span><strong>Invoice:</strong> ${inv.no}</span>
+    <span>${new Date(inv.at).toLocaleString()}</span>
+  </div>
+  ${inv.custName !== 'Walk-in' ? `<div class="customer"><strong>Customer:</strong> ${inv.custName}${inv.custPhone ? ' · ' + inv.custPhone : ''}</div>` : ''}
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th style="text-align:center;">Qty</th>
+        <th style="text-align:right;">Rate</th>
+        <th style="text-align:right;">Amount</th>
+      </tr>
+    </thead>
+    <tbody>${rows}</tbody>
+  </table>
+  <hr class="divider">
+  <div class="sum-row"><span>Subtotal</span><span>Rs. ${parseFloat(inv.sub).toLocaleString('en-US',{minimumFractionDigits:2})}</span></div>
+  ${inv.disc > 0 ? `<div class="sum-row"><span>Discount</span><span>− Rs. ${parseFloat(inv.disc).toLocaleString('en-US',{minimumFractionDigits:2})}</span></div>` : ''}
+  <div class="sum-total"><span>TOTAL</span><span>Rs. ${parseFloat(inv.total).toLocaleString('en-US',{minimumFractionDigits:2})}</span></div>
+  <div class="sum-row"><span>Paid</span><span>Rs. ${parseFloat(inv.paid||0).toLocaleString('en-US',{minimumFractionDigits:2})}</span></div>
+  ${inv.balance > 0 ? `<div class="sum-bal"><span>Balance Due</span><span>Rs. ${parseFloat(inv.balance).toLocaleString('en-US',{minimumFractionDigits:2})}</span></div>` : ''}
+  <div class="sum-meth">Payment: ${inv.meth}</div>
+  <div class="footer">
+    <hr class="divider" style="margin-bottom:12px;">
+    — Thank you for your business! —
+  </div>
+  <script>
+    window.onload = function() {
+      window.focus();
+      window.print();
+      window.onafterprint = function() { window.close(); };
+    };
+  ${'<'+'/script>'}
+</body>
+</html>`;
+
+  const w = window.open('', '_blank', 'width=680,height=850');
+  w.document.write(html);
+  w.document.close();
 }
 
 // ═══════════════════════════════════════════════
@@ -398,6 +474,7 @@ function pageDashboard() {
 // POS
 // ═══════════════════════════════════════════════
 let cart = [];
+let currentInv = null;
 
 function pagePOS() {
   const prods=db.get(K.products);
@@ -576,6 +653,7 @@ function checkout() {
 // INVOICE MODAL
 // ═══════════════════════════════════════════════
 function showInvModal(inv) {
+  currentInv = inv;
   const s=cfg();
   modal(`
   <div class="overlay">
