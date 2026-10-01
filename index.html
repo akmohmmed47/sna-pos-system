@@ -408,7 +408,8 @@ function printInv() {
     '<td style="padding:5px 0 3px;font-size:15px;font-weight:800;text-align:right;"><strong>Rs. ' + f(inv.total) + '</strong></td>',
     '</tr>',
     summaryRow('Paid', f(inv.paid||0), false, null),
-    inv.balance > 0 ? summaryRow('Balance Due', f(inv.balance), true, '#000') : '',
+    inv.paid > inv.total ? summaryRow('💵 Change', f(inv.paid - inv.total), true, '#059669') : '',
+    inv.balance > 0 ? summaryRow('Balance Due', f(inv.balance), true, '#dc2626') : '',
     '<tr><td colspan="2" style="font-size:11px;color:#555;padding-top:4px;">Payment: ' + inv.meth + '</td></tr>',
     '</table>',
 
@@ -684,6 +685,7 @@ function showInvModal(inv) {
             ${inv.disc>0?`<div style="display:flex;justify-content:space-between;margin-bottom:3px;"><span>Discount</span><span>−${fmt(inv.disc)}</span></div>`:''}
             <div style="display:flex;justify-content:space-between;font-size:15px;font-weight:800;border-top:2px solid #000;padding-top:7px;margin-top:4px;"><span>TOTAL</span><span>${fmt(inv.total)}</span></div>
             <div style="display:flex;justify-content:space-between;margin-top:4px;"><span>Paid</span><span>${fmt(inv.paid)}</span></div>
+            ${inv.paid > inv.total ? `<div style="display:flex;justify-content:space-between;color:#059669;font-weight:600;"><span>💵 Change</span><span>${fmt(inv.paid - inv.total)}</span></div>` : ''}
             ${inv.balance>0?`<div style="display:flex;justify-content:space-between;color:#dc2626;font-weight:600;"><span>Balance Due</span><span>${fmt(inv.balance)}</span></div>`:''}
             <div style="font-size:11px;color:#64748b;margin-top:3px;">Payment: ${inv.meth}</div>
           </div>
@@ -704,6 +706,8 @@ function waShare(invId) {
   let m=`*${cfg().shopName}*\nInvoice: ${inv.no}\nDate: ${new Date(inv.at).toLocaleString()}\n\n*Items:*\n`;
   inv.items.forEach(it=>{ m+=`• ${it.name} × ${it.qty} ${it.unit} = ${fmt(it.price*it.qty)}\n`; });
   m+=`\n*Total: ${fmt(inv.total)}*`;
+  m+=`\nPaid: ${fmt(inv.paid)}`;
+  if (inv.paid > inv.total) m+=`\n💵 Change: ${fmt(inv.paid - inv.total)}`;
   if (inv.balance>0) m+=`\nBalance Due: ${fmt(inv.balance)}`;
   m+='\n\nThank you! 🙏';
   const ph=inv.custPhone?inv.custPhone.replace(/\D/g,''):'';
