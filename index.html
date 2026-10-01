@@ -177,8 +177,9 @@ tbody tr:hover td { background:#F8FAFC; }
 /* PRINT — hidden div, visible only when printing */
 #pf { display:none; }
 @media print {
-  #app,#modal-root { display:none !important; }
-  #pf { display:block !important; font-family:sans-serif; padding:20px; max-width:420px; }
+  @page { margin:3mm; size:80mm auto; }
+  #app, #modal-root { display:none !important; }
+  #pf { display:block !important; }
 }
 
 ::-webkit-scrollbar { width:5px; height:5px; }
@@ -344,48 +345,75 @@ function printInv() {
   if (!currentInv) return;
   const inv = currentInv;
   const s = cfg();
+  const f = n => parseFloat(n).toLocaleString('en-US',{minimumFractionDigits:2});
 
-  const rows = inv.items.map(it =>
-    '<tr>' +
-    '<td style="padding:10px;font-size:15px;border-bottom:1px solid #e5e5e5;">' + it.name + '</td>' +
-    '<td style="padding:10px;font-size:15px;border-bottom:1px solid #e5e5e5;text-align:center;">' + it.qty + ' ' + it.unit + '</td>' +
-    '<td style="padding:10px;font-size:15px;border-bottom:1px solid #e5e5e5;text-align:right;">Rs. ' + parseFloat(it.price).toLocaleString('en-US',{minimumFractionDigits:2}) + '</td>' +
-    '<td style="padding:10px;font-size:15px;border-bottom:1px solid #e5e5e5;text-align:right;">Rs. ' + (it.price*it.qty).toLocaleString('en-US',{minimumFractionDigits:2}) + '</td>' +
+  // Thermal receipt layout — 80mm paper optimized
+  const rows = inv.items.map(it => [
+    '<tr>',
+    '<td style="padding:5px 3px;font-size:12px;border-bottom:1px solid #ddd;word-break:break-word;">' + it.name + '</td>',
+    '<td style="padding:5px 3px;font-size:12px;border-bottom:1px solid #ddd;text-align:center;white-space:nowrap;">' + it.qty + ' ' + it.unit + '</td>',
+    '<td style="padding:5px 3px;font-size:12px;border-bottom:1px solid #ddd;text-align:right;white-space:nowrap;">' + f(it.price) + '</td>',
+    '<td style="padding:5px 3px;font-size:12px;border-bottom:1px solid #ddd;text-align:right;white-space:nowrap;">' + f(it.price*it.qty) + '</td>',
     '</tr>'
-  ).join('');
+  ].join('')).join('');
+
+  const summaryRow = (label, val, bold, color) =>
+    '<tr>' +
+    '<td style="padding:3px 0;font-size:13px;' + (bold?'font-weight:700;':'') + (color?'color:'+color+';':'') + '">' + label + '</td>' +
+    '<td style="padding:3px 0;font-size:13px;text-align:right;' + (bold?'font-weight:700;':'') + (color?'color:'+color+';':'') + '">Rs. ' + val + '</td>' +
+    '</tr>';
 
   const pf = document.getElementById('pf');
   pf.innerHTML = [
-    '<div style="font-family:Arial,sans-serif;max-width:620px;margin:0 auto;padding:24px;">',
-    '<div style="font-size:26px;font-weight:800;text-align:center;margin-bottom:5px;">' + s.shopName + '</div>',
-    s.address ? '<div style="font-size:14px;text-align:center;color:#444;margin-bottom:3px;">' + s.address + '</div>' : '',
-    s.phone   ? '<div style="font-size:14px;text-align:center;color:#444;margin-bottom:3px;">📞 ' + s.phone + '</div>' : '',
-    '<hr style="border:none;border-top:1px solid #bbb;margin:14px 0;">',
-    '<div style="display:flex;justify-content:space-between;font-size:14px;margin-bottom:10px;">',
-    '<span><strong>Invoice:</strong> ' + inv.no + '</span>',
-    '<span>' + new Date(inv.at).toLocaleString() + '</span></div>',
+    '<div style="font-family:Arial,sans-serif;width:100%;max-width:300px;margin:0 auto;">',
+
+    // Header
+    '<div style="text-align:center;margin-bottom:8px;">',
+    '<div style="font-size:17px;font-weight:800;letter-spacing:.5px;">' + s.shopName + '</div>',
+    s.address ? '<div style="font-size:11px;color:#333;margin-top:3px;">' + s.address + '</div>' : '',
+    s.phone   ? '<div style="font-size:11px;color:#333;margin-top:2px;">Tel: ' + s.phone + '</div>' : '',
+    '</div>',
+
+    '<div style="border-top:1px dashed #000;margin:7px 0;"></div>',
+
+    // Invoice info — each on own line, no flex
+    '<div style="font-size:11px;margin-bottom:3px;"><strong>Invoice:</strong> ' + inv.no + '</div>',
+    '<div style="font-size:11px;margin-bottom:3px;"><strong>Date:</strong> ' + new Date(inv.at).toLocaleDateString() + ' ' + new Date(inv.at).toLocaleTimeString() + '</div>',
     inv.custName !== 'Walk-in'
-      ? '<div style="font-size:14px;margin-bottom:10px;"><strong>Customer:</strong> ' + inv.custName + (inv.custPhone ? ' &middot; ' + inv.custPhone : '') + '</div>'
+      ? '<div style="font-size:11px;margin-bottom:3px;"><strong>Customer:</strong> ' + inv.custName + (inv.custPhone ? ' / ' + inv.custPhone : '') + '</div>'
       : '',
-    '<table style="width:100%;border-collapse:collapse;margin:12px 0;">',
+
+    '<div style="border-top:1px dashed #000;margin:7px 0;"></div>',
+
+    // Items table — fixed column widths
+    '<table style="width:100%;border-collapse:collapse;table-layout:fixed;">',
+    '<colgroup><col style="width:36%"><col style="width:22%"><col style="width:21%"><col style="width:21%"></colgroup>',
     '<thead><tr>',
-    '<th style="padding:9px 10px;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;border-bottom:2px solid #000;background:#f5f5f5;text-align:left;">Item</th>',
-    '<th style="padding:9px 10px;font-size:13px;font-weight:700;text-transform:uppercase;border-bottom:2px solid #000;background:#f5f5f5;text-align:center;">Qty</th>',
-    '<th style="padding:9px 10px;font-size:13px;font-weight:700;text-transform:uppercase;border-bottom:2px solid #000;background:#f5f5f5;text-align:right;">Rate</th>',
-    '<th style="padding:9px 10px;font-size:13px;font-weight:700;text-transform:uppercase;border-bottom:2px solid #000;background:#f5f5f5;text-align:right;">Amount</th>',
+    '<th style="padding:4px 3px;font-size:11px;font-weight:700;border-bottom:1px solid #000;text-align:left;">ITEM</th>',
+    '<th style="padding:4px 3px;font-size:11px;font-weight:700;border-bottom:1px solid #000;text-align:center;">QTY</th>',
+    '<th style="padding:4px 3px;font-size:11px;font-weight:700;border-bottom:1px solid #000;text-align:right;">RATE</th>',
+    '<th style="padding:4px 3px;font-size:11px;font-weight:700;border-bottom:1px solid #000;text-align:right;">AMT</th>',
     '</tr></thead>',
-    '<tbody>' + rows + '</tbody></table>',
-    '<hr style="border:none;border-top:1px solid #bbb;margin:12px 0;">',
-    '<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:15px;"><span>Subtotal</span><span>Rs. ' + parseFloat(inv.sub).toLocaleString('en-US',{minimumFractionDigits:2}) + '</span></div>',
-    inv.disc > 0 ? '<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:15px;"><span>Discount</span><span>&minus; Rs. ' + parseFloat(inv.disc).toLocaleString('en-US',{minimumFractionDigits:2}) + '</span></div>' : '',
-    '<div style="display:flex;justify-content:space-between;padding:11px 0 8px;font-size:22px;font-weight:800;border-top:3px solid #000;margin-top:6px;">',
-    '<span>TOTAL</span><span>Rs. ' + parseFloat(inv.total).toLocaleString('en-US',{minimumFractionDigits:2}) + '</span></div>',
-    '<div style="display:flex;justify-content:space-between;padding:5px 0;font-size:15px;"><span>Paid</span><span>Rs. ' + parseFloat(inv.paid||0).toLocaleString('en-US',{minimumFractionDigits:2}) + '</span></div>',
-    inv.balance > 0 ? '<div style="display:flex;justify-content:space-between;font-size:16px;font-weight:700;color:#dc2626;padding:4px 0;"><span>Balance Due</span><span>Rs. ' + parseFloat(inv.balance).toLocaleString('en-US',{minimumFractionDigits:2}) + '</span></div>' : '',
-    '<div style="font-size:13px;color:#666;padding-top:5px;">Payment: ' + inv.meth + '</div>',
-    '<div style="text-align:center;font-size:14px;color:#666;margin-top:24px;">',
-    '<hr style="border:none;border-top:1px solid #bbb;margin-bottom:12px;">',
-    '&mdash; Thank you for your business! &mdash;</div>',
+    '<tbody>' + rows + '</tbody>',
+    '</table>',
+
+    '<div style="border-top:1px dashed #000;margin:7px 0;"></div>',
+
+    // Summary — simple table, no flex
+    '<table style="width:100%;border-collapse:collapse;">',
+    summaryRow('Subtotal', f(inv.sub), false, null),
+    inv.disc > 0 ? summaryRow('Discount', '- ' + f(inv.disc), false, null) : '',
+    '<tr style="border-top:2px solid #000;">',
+    '<td style="padding:5px 0 3px;font-size:15px;font-weight:800;"><strong>TOTAL</strong></td>',
+    '<td style="padding:5px 0 3px;font-size:15px;font-weight:800;text-align:right;"><strong>Rs. ' + f(inv.total) + '</strong></td>',
+    '</tr>',
+    summaryRow('Paid', f(inv.paid||0), false, null),
+    inv.balance > 0 ? summaryRow('Balance Due', f(inv.balance), true, '#000') : '',
+    '<tr><td colspan="2" style="font-size:11px;color:#555;padding-top:4px;">Payment: ' + inv.meth + '</td></tr>',
+    '</table>',
+
+    '<div style="border-top:1px dashed #000;margin:7px 0;"></div>',
+    '<div style="text-align:center;font-size:12px;color:#444;padding-bottom:6px;">Thank you for your business!</div>',
     '</div>'
   ].join('');
 
