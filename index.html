@@ -706,11 +706,21 @@ function addPurItem(){
   document.getElementById('pi-qty').value='';document.getElementById('pi-cost').value='';
 }
 function removePurItem(pid){purItems=purItems.filter(i=>i.pid!==pid);renderPurItems();}
+function editPurItem(pid){
+  const item=purItems.find(i=>i.pid===pid); if(!item)return;
+  document.getElementById('pi-prod').value=pid;
+  document.getElementById('pi-qty').value=item.qty;
+  document.getElementById('pi-cost').value=item.cost;
+  purItems=purItems.filter(i=>i.pid!==pid);
+  renderPurItems();
+  toast('✏️ Values pre-filled — edit & click Add');
+  document.getElementById('pi-qty').focus();
+}
 function renderPurItems(){
   const container=document.getElementById('pur-items-list');if(!container)return;
   const total=purItems.reduce((s,i)=>s+(i.qty*i.cost),0);
   if(!purItems.length){container.innerHTML='<div style="text-align:center;color:var(--muted);font-size:13px;padding:10px;">No items added yet</div>';document.getElementById('pur-total').value='';calcPurBal();return;}
-  container.innerHTML=`<table style="width:100%;border-collapse:collapse;margin-bottom:10px;"><thead><tr><th>Product</th><th>Qty</th><th>Cost</th><th>Total</th><th></th></tr></thead><tbody>${purItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty} ${i.unit}</td><td>${fmt(i.cost)}</td><td>${fmt(i.qty*i.cost)}</td><td><button class="btn btn-sm btn-dg" onclick="removePurItem('${i.pid}')">×</button></td></tr>`).join('')}</tbody></table>`;
+  container.innerHTML=`<table style="width:100%;border-collapse:collapse;margin-bottom:10px;"><thead><tr><th>Product</th><th>Qty</th><th>Cost</th><th>Total</th><th>Actions</th></tr></thead><tbody>${purItems.map(i=>`<tr><td>${i.name}</td><td>${i.qty} ${i.unit}</td><td>${fmt(i.cost)}</td><td>${fmt(i.qty*i.cost)}</td><td style="display:flex;gap:4px;"><button class="btn btn-sm btn-ghost" onclick="editPurItem('${i.pid}')">✏️ Edit</button><button class="btn btn-sm btn-dg" onclick="removePurItem('${i.pid}')">🗑️ Del</button></td></tr>`).join('')}</tbody></table>`;
   document.getElementById('pur-total').value=total.toFixed(2);calcPurBal();
 }
 function calcPurBal(){
@@ -839,27 +849,35 @@ function pageExpenses(){
   <div class="tbl-wrap"><table>
     <thead><tr><th>Date</th><th>Category</th><th>Description</th><th>Amount</th><th></th></tr></thead>
     <tbody>${exps.length===0?`<tr><td colspan="5"><div class="empty"><div class="ei">💸</div><p>No expenses yet</p></div></td></tr>`:
-      exps.slice().reverse().map(e=>`<tr><td style="font-size:12px;">${fmtDate(e.date)}</td><td><span class="badge bg-amber">${e.cat}</span></td><td>${e.desc||'—'}</td><td><strong>${fmt(e.amount)}</strong></td><td><button class="btn btn-sm btn-dg" onclick="delExp('${e.id}')">Del</button></td></tr>`).join('')}
+      exps.slice().reverse().map(e=>`<tr><td style="font-size:12px;">${fmtDate(e.date)}</td><td><span class="badge bg-amber">${e.cat}</span></td><td>${e.desc||'—'}</td><td><strong>${fmt(e.amount)}</strong></td><td style="display:flex;gap:4px;"><button class="btn btn-sm btn-ghost" onclick="expModal('${e.id}')">Edit</button><button class="btn btn-sm btn-dg" onclick="delExp('${e.id}')">Del</button></td></tr>`).join('')}
     </tbody>
   </table></div>`;
 }
-function expModal(){
+function expModal(id=null){
+  const exps=db.get(K.expenses); const e=id?exps.find(x=>x.id===id):null;
   modal(`<div class="overlay"><div class="modal modal-sm">
-    <div class="mh"><h3>💸 Add Expense</h3><button class="mclose" onclick="closeModal()">×</button></div>
+    <div class="mh"><h3>${e?'✏️ Edit Expense':'💸 Add Expense'}</h3><button class="mclose" onclick="closeModal()">×</button></div>
     <div class="mb">
-      <div class="fg"><label>Date *</label><input type="date" id="ex-date" value="${new Date().toISOString().split('T')[0]}"></div>
-      <div class="fg"><label>Category *</label><select id="ex-cat">${EXP_CATS.map(c=>`<option value="${c}">${c}</option>`).join('')}</select></div>
-      <div class="fg"><label>Description</label><input id="ex-desc" placeholder="Details about this expense..."></div>
-      <div class="fg"><label>Amount (Rs.) *</label><input type="number" id="ex-amt" placeholder="0.00" min="0"></div>
+      <div class="fg"><label>Date *</label><input type="date" id="ex-date" value="${e?.date||new Date().toISOString().split('T')[0]}"></div>
+      <div class="fg"><label>Category *</label><select id="ex-cat">${EXP_CATS.map(c=>`<option value="${c}" ${e?.cat===c?'selected':''}>${c}</option>`).join('')}</select></div>
+      <div class="fg"><label>Description</label><input id="ex-desc" value="${e?.desc||''}" placeholder="Details about this expense..."></div>
+      <div class="fg"><label>Amount (Rs.) *</label><input type="number" id="ex-amt" value="${e?.amount||''}" placeholder="0.00" min="0"></div>
     </div>
-    <div class="mf"><button class="btn btn-ghost" onclick="closeModal()">Cancel</button><button class="btn btn-warning" onclick="saveExp()">💾 Save Expense</button></div>
+    <div class="mf">
+      <button class="btn btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-warning" onclick="saveExp('${id||''}')">💾 ${e?'Save Changes':'Save Expense'}</button>
+    </div>
   </div></div>`);
 }
-function saveExp(){
-  const amt=parseFloat(document.getElementById('ex-amt').value);if(!amt||amt<=0){toast('⚠️ Enter valid amount!','warn');return;}
+function saveExp(id=''){
+  const amt=parseFloat(document.getElementById('ex-amt').value);
+  if(!amt||amt<=0){toast('⚠️ Enter valid amount!','warn');return;}
   const exps=db.get(K.expenses);
-  exps.push({id:uid(),date:document.getElementById('ex-date').value,cat:document.getElementById('ex-cat').value,desc:document.getElementById('ex-desc').value.trim(),amount:amt,at:new Date().toISOString()});
-  db.set(K.expenses,exps);closeModal();go('expenses');toast('✅ Expense saved!');
+  const data={date:document.getElementById('ex-date').value,cat:document.getElementById('ex-cat').value,desc:document.getElementById('ex-desc').value.trim(),amount:amt};
+  if(id){const i=exps.findIndex(e=>e.id===id);if(i>=0)exps[i]={...exps[i],...data};}
+  else exps.push({id:uid(),...data,at:new Date().toISOString()});
+  db.set(K.expenses,exps);closeModal();go('expenses');
+  toast(id?'✅ Expense updated!':'✅ Expense saved!');
 }
 function delExp(id){if(!confirm('Delete this expense?'))return;db.set(K.expenses,db.get(K.expenses).filter(e=>e.id!==id));go('expenses');toast('🗑️ Deleted');}
 
